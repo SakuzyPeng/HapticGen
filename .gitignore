@@ -7,3 +7,16 @@ xcuserdata/
 # Build artifacts
 build/
 DerivedData/
+
+# Common audio assets
+*.wav
+*.wave
+*.aiff
+*.aif
+*.caf
+*.mp3
+*.m4a
+*.aac
+*.flac
+*.ogg
+*.opus
