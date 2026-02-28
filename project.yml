@@ -1,0 +1,49 @@
+name: AudioHapticGenerator
+options:
+  bundleIdPrefix: com.sakuzy
+  deploymentTarget:
+    iOS: "26.0"
+  xcodeVersion: "26.0"
+  createIntermediateGroups: true
+
+settings:
+  base:
+    SWIFT_VERSION: "6.0"
+    ENABLE_PREVIEWS: YES
+
+targets:
+  AudioHapticGenerator:
+    type: application
+    platform: iOS
+    deploymentTarget: "26.0"
+    sources:
+      - Sources
+    resources:
+      - Resources
+    info:
+      path: Sources/Info.plist
+      properties:
+        UILaunchScreen: {}
+        UISupportedInterfaceOrientations:
+          - UIInterfaceOrientationPortrait
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.sakuzy.AudioHapticGenerator
+        DEVELOPMENT_TEAM: ""
+        INFOPLIST_FILE: Sources/Info.plist
+    dependencies:
+      - sdk: CoreHaptics.framework
+      - sdk: AVFoundation.framework
+      - sdk: Accelerate.framework
+
+  AudioHapticGeneratorTests:
+    type: bundle.unit-test
+    platform: iOS
+    deploymentTarget: "26.0"
+    sources:
+      - Tests
+    settings:
+      base:
+        GENERATE_INFOPLIST_FILE: YES
+    dependencies:
+      - target: AudioHapticGenerator
