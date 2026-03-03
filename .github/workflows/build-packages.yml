@@ -52,7 +52,7 @@ jobs:
   signed-ipa:
     name: Build Signed IPA
     runs-on: macos-latest
-    if: ${{ github.event_name == 'workflow_dispatch' && (inputs.package_type == 'ipa' || inputs.package_type == 'both') }}
+    if: ${{ github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && (inputs.package_type == 'ipa' || inputs.package_type == 'both')) }}
     env:
       IOS_CERTIFICATE_P12_BASE64: ${{ secrets.IOS_CERTIFICATE_P12_BASE64 }}
       IOS_CERTIFICATE_PASSWORD: ${{ secrets.IOS_CERTIFICATE_PASSWORD }}

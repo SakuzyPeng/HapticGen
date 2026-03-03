@@ -186,7 +186,7 @@ xcodebuild test -scheme HapticGen \
 
 仓库内置了 GitHub Actions 流水线：[`.github/workflows/build-packages.yml`](.github/workflows/build-packages.yml)。
 
-1. `push master`：自动构建并上传 `HapticGen-simulator-app.zip`（可用于模拟器测试）。
+1. `push master`：自动构建并上传 `HapticGen-simulator-app.zip`，并在签名 secrets 完整时自动产出签名 IPA。
 2. `workflow_dispatch`：
    - `package_type=simulator`：只产出模拟器包。
    - `package_type=ipa`：只产出签名 IPA。
@@ -200,6 +200,8 @@ xcodebuild test -scheme HapticGen \
 4. `IOS_EXPORT_OPTIONS_BASE64`
 5. `IOS_KEYCHAIN_PASSWORD`
 6. `IOS_TEAM_ID`
+
+若 secrets 未配置完整，`Build Signed IPA` 会在 `Validate signing secrets` 步骤失败。
 
 可参考示例导出选项文件：[`scripts/ci/ExportOptions.plist.example`](scripts/ci/ExportOptions.plist.example)。
 
