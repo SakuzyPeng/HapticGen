@@ -97,6 +97,12 @@ xcodebuild build -scheme AudioHapticGenerator \
 - 在 Files App 长按 -> "用 Haptic Gen 打开"
 - App 自动解压并进入播放界面，点击▶播放
 
+## 示例文件
+
+- [2ch_haptic_trailer.ahap](Samples/2ch_haptic_trailer.ahap) - 生成的 AHAP 样品（2ch 音频）
+  - 在 iPhone Files App 中打开此文件即可预览
+  - 包含 HapticContinuous（持续触觉）和 HapticTransient（瞬态触觉）事件
+
 ## 已知问题 & 待做
 
 **验证中：**
