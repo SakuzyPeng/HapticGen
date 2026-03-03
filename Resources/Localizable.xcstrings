@@ -265,6 +265,34 @@
         "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "导出路径：%@" } }
       }
     },
+    "debug.label.strategyRatio.format" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Strategy K/V/B: %d%% / %d%% / %d%%" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "策略占比 K/V/B：%d%% / %d%% / %d%%" } }
+      }
+    },
+    "debug.label.lfeAvailable.true" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "LFE available: Yes" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "LFE 可用：是" } }
+      }
+    },
+    "debug.label.lfeAvailable.false" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "LFE available: No" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "LFE 可用：否" } }
+      }
+    },
+    "debug.label.fallback.format" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Fallback: %@" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "回退：%@" } }
+      }
+    },
 
     "player.navigation.title" : {
       "extractionState" : "manual",

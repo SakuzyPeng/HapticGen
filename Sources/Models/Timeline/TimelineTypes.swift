@@ -236,25 +236,70 @@ public struct HapticTimelineDocument: Sendable, Equatable {
         self.template = template
     }
 
-    public static func `default`(for layout: ChannelLayout, duration: TimeInterval, template: TimelineTemplate = .trailer) -> HapticTimelineDocument {
-        let baseClip = TimelineClip(start: 0, duration: max(1, duration))
+    public static func `default`(
+        for layout: ChannelLayout,
+        duration: TimeInterval,
+        template: TimelineTemplate = .trailer,
+        strategy: DefaultHapticStrategyResult? = nil
+    ) -> HapticTimelineDocument {
+        let resolver = DefaultHapticStrategyResolver()
+        let fullDuration = max(1, duration)
+        let dominantState = strategy?.diagnostics.dominantState ?? .balanced
+        let lfeGroup: ChannelGroup = (strategy?.diagnostics.lfeAvailable == true) ? .lfe : .front
+
+        let segments = normalizedSegments(
+            strategy?.segments,
+            fallbackDuration: fullDuration,
+            fallbackState: dominantState
+        )
+
+        let rumbleClips = segments.map { segment in
+            TimelineClip(
+                start: segment.start,
+                duration: max(0.05, segment.duration),
+                intensityKeyframes: [TrackKeyframe(time: 0, value: 0.7), TrackKeyframe(time: 1, value: 0.7)],
+                sharpnessKeyframes: [TrackKeyframe(time: 0, value: 0.35), TrackKeyframe(time: 1, value: 0.35)]
+            )
+        }
+
+        let textureClips = segments.map { segment in
+            let pulse = resolver.texturePulse(for: segment.state)
+            return TimelineClip(
+                start: segment.start,
+                duration: max(0.05, segment.duration),
+                intensityKeyframes: [TrackKeyframe(time: 0, value: 0.6), TrackKeyframe(time: 1, value: 0.6)],
+                sharpnessKeyframes: [TrackKeyframe(time: 0, value: segment.state == .vocalLead ? 0.58 : 0.5), TrackKeyframe(time: 1, value: segment.state == .vocalLead ? 0.58 : 0.5)],
+                pulseRate: pulse.rate,
+                pulseDepth: pulse.depth
+            )
+        }
+
+        let impactClips = segments.map { segment in
+            TimelineClip(
+                start: segment.start,
+                duration: max(0.05, segment.duration),
+                intensityKeyframes: [TrackKeyframe(time: 0, value: 0.85), TrackKeyframe(time: 1, value: 0.85)],
+                sharpnessKeyframes: [TrackKeyframe(time: 0, value: 0.7), TrackKeyframe(time: 1, value: 0.7)],
+                transientRule: resolver.impactRule(for: segment.state)
+            )
+        }
 
         let rumble = HapticTrack(
             name: "Rumble",
             style: .continuous,
-            source: TrackSource(channelGroup: .lfe, frequencyBand: .sub),
+            source: TrackSource(channelGroup: lfeGroup, frequencyBand: .sub),
             mixWeight: template == .music ? 0.8 : 1.0,
             maxOutput: 1.0,
-            clips: [baseClip]
+            clips: rumbleClips
         )
 
         let texture = HapticTrack(
             name: "Texture",
-            style: .pulseTexture,
-            source: TrackSource(channelGroup: .front, frequencyBand: template == .action ? .high : .mid),
+            style: resolver.textureStyle(for: dominantState),
+            source: TrackSource(channelGroup: .front, frequencyBand: dominantState == .kickLead ? .high : .mid),
             mixWeight: 0.8,
             maxOutput: 0.85,
-            clips: [TimelineClip(start: 0, duration: max(1, duration), pulseRate: template == .music ? 8 : 6, pulseDepth: 0.35)]
+            clips: textureClips
         )
 
         let impact = HapticTrack(
@@ -263,9 +308,42 @@ public struct HapticTimelineDocument: Sendable, Equatable {
             source: TrackSource(channelGroup: layout.channelCount > 2 ? .front : .all, frequencyBand: .low),
             mixWeight: 1.0,
             maxOutput: template == .action ? 1.0 : 0.9,
-            clips: [TimelineClip(start: 0, duration: max(1, duration), transientRule: ClipTransientRule(threshold: template == .music ? 0.65 : 0.5, cooldown: 0.03, gain: 1.0))]
+            clips: impactClips
         )
 
-        return HapticTimelineDocument(duration: duration, tracks: [rumble, texture, impact], template: template)
+        return HapticTimelineDocument(duration: fullDuration, tracks: [rumble, texture, impact], template: template)
+    }
+
+    public static func `default`(
+        for analysis: MultiChannelAnalysisResult,
+        template: TimelineTemplate = .trailer,
+        strategy: DefaultHapticStrategyResult? = nil
+    ) -> HapticTimelineDocument {
+        self.default(
+            for: analysis.layout,
+            duration: analysis.duration,
+            template: template,
+            strategy: strategy
+        )
+    }
+
+    private static func normalizedSegments(
+        _ source: [DefaultHapticStateSegment]?,
+        fallbackDuration: TimeInterval,
+        fallbackState: DefaultHapticStrategyState
+    ) -> [DefaultHapticStateSegment] {
+        guard let source, !source.isEmpty else {
+            return [DefaultHapticStateSegment(state: fallbackState, start: 0, end: fallbackDuration)]
+        }
+
+        var output = source
+            .map { DefaultHapticStateSegment(state: $0.state, start: max(0, $0.start), end: min(fallbackDuration, max($0.end, $0.start + 0.05))) }
+            .filter { $0.duration >= 0.05 }
+
+        if output.isEmpty {
+            output = [DefaultHapticStateSegment(state: fallbackState, start: 0, end: fallbackDuration)]
+        }
+
+        return output
     }
 }

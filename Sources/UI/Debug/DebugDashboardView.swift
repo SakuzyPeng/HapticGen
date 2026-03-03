@@ -205,6 +205,21 @@ struct DebugDashboardView: View {
                     let totalFrames = analysis.channels.first?.frames.count ?? 0
                     Text(L10n.debugAnalysisFrames(totalFrames))
                     Text(L10n.debugLayout(analysis.layout.channelCount))
+                    if let diagnostics = viewModel.strategyDiagnostics {
+                        Text(
+                            L10n.debugStrategyRatio(
+                                kick: diagnostics.kickLeadRatio,
+                                vocal: diagnostics.vocalLeadRatio,
+                                balanced: diagnostics.balancedRatio
+                            )
+                        )
+                        Text(L10n.debugLFEAvailable(diagnostics.lfeAvailable))
+                        if !diagnostics.fallbackReasons.isEmpty {
+                            Text(L10n.debugFallback(diagnostics.fallbackReasons.joined(separator: ", ")))
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                        }
+                    }
                 } else {
                     Text(L10n.debugAnalysisFramesEmpty)
                 }

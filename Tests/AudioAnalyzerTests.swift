@@ -45,4 +45,32 @@ final class AudioAnalyzerTests: XCTestCase {
         let transientCount = result.channels[0].frames.filter(\.isTransient).count
         XCTAssertGreaterThanOrEqual(transientCount, 1)
     }
+
+    func testBandEnergyTracksKickAndVocalRanges() async throws {
+        let url = try TestAudioFactory.makeStereoWAV(
+            duration: 1.0,
+            left: { frame, sr in
+                let t = Double(frame) / sr
+                return Float(sin(2 * .pi * 90 * t))
+            },
+            right: { frame, sr in
+                let t = Double(frame) / sr
+                return Float(sin(2 * .pi * 800 * t))
+            }
+        )
+
+        let analyzer = AudioAnalyzer()
+        let result = try await analyzer.analyze(url: url)
+
+        let leftFrames = result.channels[0].frames
+        let rightFrames = result.channels[1].frames
+
+        let leftKick = leftFrames.map(\.bandEnergy.kick).reduce(0, +) / Float(max(1, leftFrames.count))
+        let leftVocal = leftFrames.map(\.bandEnergy.vocal).reduce(0, +) / Float(max(1, leftFrames.count))
+        let rightKick = rightFrames.map(\.bandEnergy.kick).reduce(0, +) / Float(max(1, rightFrames.count))
+        let rightVocal = rightFrames.map(\.bandEnergy.vocal).reduce(0, +) / Float(max(1, rightFrames.count))
+
+        XCTAssertGreaterThan(leftKick, leftVocal)
+        XCTAssertGreaterThan(rightVocal, rightKick)
+    }
 }

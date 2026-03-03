@@ -31,6 +31,7 @@ public final class HapticGenerator: @unchecked Sendable {
         var transientEvents: [TransientPoint] = []
 
         var lastTransientTime: TimeInterval = -.greatestFiniteMagnitude
+        var recentTransientTimes: [TimeInterval] = []
 
         for frameIndex in 0..<frameCount {
             let time = analysis.channels[0].frames[frameIndex].time
@@ -63,15 +64,20 @@ public final class HapticGenerator: @unchecked Sendable {
             intensityPoints.append(CurvePoint(time: time, value: intensity))
             sharpnessPoints.append(CurvePoint(time: time, value: sharpness))
 
-            if rawTransient >= settings.transientSensitivity && (time - lastTransientTime) >= 0.015 {
-                transientEvents.append(
-                    TransientPoint(
-                        time: time,
-                        intensity: max(intensity, clamp01(rawTransient)),
-                        sharpness: sharpness
+            let hasMinGap = (time - lastTransientTime) >= settings.transientMinInterval
+            if rawTransient >= settings.transientSensitivity && hasMinGap {
+                recentTransientTimes.removeAll { time - $0 > 1.0 }
+                if recentTransientTimes.count < settings.transientMaxPerSecond {
+                    transientEvents.append(
+                        TransientPoint(
+                            time: time,
+                            intensity: max(intensity, clamp01(rawTransient)),
+                            sharpness: sharpness
+                        )
                     )
-                )
-                lastTransientTime = time
+                    recentTransientTimes.append(time)
+                    lastTransientTime = time
+                }
             }
         }
 

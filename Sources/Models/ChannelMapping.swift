@@ -111,6 +111,21 @@ public struct ChannelMapping: Sendable, Equatable {
         }
     }
 
+    public static func defaults(
+        for layout: ChannelLayout,
+        analysis: MultiChannelAnalysisResult,
+        profile: DefaultHapticProfile = .musicTrailer
+    ) -> ChannelMapping {
+        let resolver = DefaultHapticStrategyResolver()
+        let resolved = resolver.resolve(analysis: analysis, layout: layout, profile: profile)
+        let mapping = resolved.mapping.withFallbackResolved(using: layout.labels)
+
+        if mapping.intensity.isEmpty || mapping.sharpness.isEmpty || mapping.transient.isEmpty {
+            return defaults(for: layout)
+        }
+        return mapping
+    }
+
     public func withFallbackResolved(using labels: [String]) -> ChannelMapping {
         ChannelMapping(
             intensity: normalizedWeights(for: .intensity, availableLabels: labels),
