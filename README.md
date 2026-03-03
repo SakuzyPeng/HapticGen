@@ -39,13 +39,25 @@
 
 ## 安装 & 使用
 
+本项目使用 **XcodeGen** 管理项目配置。不要提交 .xcodeproj，而是通过 project.yml 生成。
+
+### 初次设置
+
+```bash
+# 1. 安装 XcodeGen（如未安装）
+brew install xcodegen
+
+# 2. 生成 Xcode 项目（修改 project.yml 后也需要重新生成）
+xcodegen generate
+
+# 3. 打开项目
+open AudioHapticGenerator.xcodeproj
+```
+
 ### 构建
 
 ```bash
-# 从 project.yml 重新生成 Xcode 项目
-xcodegen generate
-
-# 用 Xcode 构建（Cmd+B）或命令行
+# Xcode 中构建（Cmd+B）或命令行
 xcodebuild build -scheme AudioHapticGenerator \
   -destination 'platform=iOS Simulator,name=iPhone 17 Pro'
 ```
