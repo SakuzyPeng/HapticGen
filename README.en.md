@@ -182,6 +182,36 @@ xcodebuild test -scheme AudioHapticGenerator \
   -only-testing AudioHapticGeneratorTests/AnalysisBenchmarkTests
 ```
 
+## CI/CD (App Package Output)
+
+This repository includes a GitHub Actions pipeline: [`.github/workflows/build-packages.yml`](.github/workflows/build-packages.yml).
+
+1. `push master`: automatically builds and uploads `AudioHapticGenerator-simulator-app.zip` (for simulator testing).
+2. `workflow_dispatch`:
+   - `package_type=simulator`: build simulator package only.
+   - `package_type=ipa`: build signed IPA only.
+   - `package_type=both`: build both package types.
+
+Signed IPA builds require these `GitHub Secrets`:
+
+1. `IOS_CERTIFICATE_P12_BASE64`
+2. `IOS_CERTIFICATE_PASSWORD`
+3. `IOS_PROVISIONING_PROFILE_BASE64`
+4. `IOS_EXPORT_OPTIONS_BASE64`
+5. `IOS_KEYCHAIN_PASSWORD`
+6. `IOS_TEAM_ID`
+
+Use this export options template as reference:
+[`scripts/ci/ExportOptions.plist.example`](scripts/ci/ExportOptions.plist.example).
+
+Base64 examples:
+
+```bash
+base64 < certificate.p12 | tr -d '\n'
+base64 < profile.mobileprovision | tr -d '\n'
+base64 < ExportOptions.plist | tr -d '\n'
+```
+
 ## Contributing
 
 This project is a personal feasibility validation project and does not currently accept external contributions. For suggestions or bug reports, please open a GitHub Issue.

@@ -182,6 +182,35 @@ xcodebuild test -scheme AudioHapticGenerator \
   -only-testing AudioHapticGeneratorTests/AnalysisBenchmarkTests
 ```
 
+## CI/CD（产出应用包）
+
+仓库内置了 GitHub Actions 流水线：[`.github/workflows/build-packages.yml`](.github/workflows/build-packages.yml)。
+
+1. `push master`：自动构建并上传 `AudioHapticGenerator-simulator-app.zip`（可用于模拟器测试）。
+2. `workflow_dispatch`：
+   - `package_type=simulator`：只产出模拟器包。
+   - `package_type=ipa`：只产出签名 IPA。
+   - `package_type=both`：同时产出两种包。
+
+签名 IPA 需要预先配置以下 `GitHub Secrets`：
+
+1. `IOS_CERTIFICATE_P12_BASE64`
+2. `IOS_CERTIFICATE_PASSWORD`
+3. `IOS_PROVISIONING_PROFILE_BASE64`
+4. `IOS_EXPORT_OPTIONS_BASE64`
+5. `IOS_KEYCHAIN_PASSWORD`
+6. `IOS_TEAM_ID`
+
+可参考示例导出选项文件：[`scripts/ci/ExportOptions.plist.example`](scripts/ci/ExportOptions.plist.example)。
+
+Base64 编码示例：
+
+```bash
+base64 < certificate.p12 | tr -d '\n'
+base64 < profile.mobileprovision | tr -d '\n'
+base64 < ExportOptions.plist | tr -d '\n'
+```
+
 ## 贡献
 
 本项目为个人可行性验证项目，暂不接受外部贡献。如有建议或发现 bug，欢迎在 GitHub Issues 提出。

@@ -1,0 +1,105 @@
+name: Build App Packages
+
+on:
+  push:
+    branches:
+      - master
+  workflow_dispatch:
+    inputs:
+      package_type:
+        description: "Select package output"
+        required: true
+        default: "both"
+        type: choice
+        options:
+          - simulator
+          - ipa
+          - both
+
+concurrency:
+  group: build-packages-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  simulator-package:
+    name: Build Simulator App Package
+    runs-on: macos-latest
+    if: ${{ github.event_name == 'push' || inputs.package_type == 'simulator' || inputs.package_type == 'both' }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Select latest stable Xcode
+        uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: latest-stable
+
+      - name: Install XcodeGen
+        run: brew install xcodegen
+
+      - name: Build simulator package
+        id: simulator
+        run: scripts/ci/build_simulator_package.sh
+
+      - name: Upload simulator artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: AudioHapticGenerator-simulator-app
+          path: ${{ steps.simulator.outputs.zip_path }}
+          if-no-files-found: error
+
+  signed-ipa:
+    name: Build Signed IPA
+    runs-on: macos-latest
+    if: ${{ github.event_name == 'workflow_dispatch' && (inputs.package_type == 'ipa' || inputs.package_type == 'both') }}
+    env:
+      IOS_CERTIFICATE_P12_BASE64: ${{ secrets.IOS_CERTIFICATE_P12_BASE64 }}
+      IOS_CERTIFICATE_PASSWORD: ${{ secrets.IOS_CERTIFICATE_PASSWORD }}
+      IOS_PROVISIONING_PROFILE_BASE64: ${{ secrets.IOS_PROVISIONING_PROFILE_BASE64 }}
+      IOS_EXPORT_OPTIONS_BASE64: ${{ secrets.IOS_EXPORT_OPTIONS_BASE64 }}
+      IOS_KEYCHAIN_PASSWORD: ${{ secrets.IOS_KEYCHAIN_PASSWORD }}
+      IOS_TEAM_ID: ${{ secrets.IOS_TEAM_ID }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Select latest stable Xcode
+        uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: latest-stable
+
+      - name: Install XcodeGen
+        run: brew install xcodegen
+
+      - name: Validate signing secrets
+        run: |
+          missing=0
+          for name in \
+            IOS_CERTIFICATE_P12_BASE64 \
+            IOS_CERTIFICATE_PASSWORD \
+            IOS_PROVISIONING_PROFILE_BASE64 \
+            IOS_EXPORT_OPTIONS_BASE64 \
+            IOS_KEYCHAIN_PASSWORD \
+            IOS_TEAM_ID; do
+            if [ -z "${!name}" ]; then
+              echo "Missing required secret: $name" >&2
+              missing=1
+            fi
+          done
+
+          if [ "$missing" -ne 0 ]; then
+            exit 1
+          fi
+
+      - name: Build signed IPA
+        id: signed_ipa
+        run: scripts/ci/build_signed_ipa.sh
+
+      - name: Upload IPA artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: AudioHapticGenerator-signed-ipa
+          path: ${{ steps.signed_ipa.outputs.ipa_path }}
+          if-no-files-found: error
