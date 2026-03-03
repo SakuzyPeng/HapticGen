@@ -1,5 +1,7 @@
 # Haptic Gen
 
+中文 | [English](README.en.md)
+
 一个 iOS 工具应用，从多声道音频文件自动生成 Apple AHAP（Haptic and Audio Pattern）触觉文件。支持立体声到 22.2 声道，使用 FFT 频谱分析提取触觉特征，并支持音频与触觉同步播放预览。
 
 **当前版本为可行性验证的演示版本（0.1.0-alpha）。**
