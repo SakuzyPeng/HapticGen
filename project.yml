@@ -11,6 +11,11 @@ settings:
     SWIFT_VERSION: "6.0"
     ENABLE_PREVIEWS: YES
 
+packages:
+  ZIPFoundation:
+    url: https://github.com/weichsel/ZIPFoundation.git
+    from: "0.9.19"
+
 targets:
   AudioHapticGenerator:
     type: application
@@ -26,6 +31,13 @@ targets:
         UILaunchScreen: {}
         UISupportedInterfaceOrientations:
           - UIInterfaceOrientationPortrait
+        LSSupportsOpeningDocumentsInPlace: false
+        CFBundleDocumentTypes:
+          - CFBundleTypeName: Haptic Trailer
+            CFBundleTypeRole: Viewer
+            LSItemContentTypes:
+              - public.zip-archive
+            LSHandlerRank: Alternate
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.sakuzy.AudioHapticGenerator
@@ -35,6 +47,8 @@ targets:
       - sdk: CoreHaptics.framework
       - sdk: AVFoundation.framework
       - sdk: Accelerate.framework
+      - package: ZIPFoundation
+        product: ZIPFoundation
 
   AudioHapticGeneratorTests:
     type: bundle.unit-test

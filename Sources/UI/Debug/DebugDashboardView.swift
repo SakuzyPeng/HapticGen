@@ -48,9 +48,8 @@ struct DebugDashboardView: View {
                 Text(viewModel.errorMessage ?? "")
             }
             .sheet(isPresented: $viewModel.showTrailerPlayer) {
-                if let manifestURL = viewModel.trailerManifestURL,
-                   let ahapURL = viewModel.trailerAHAPURL {
-                    HapticTrailerPlayerView(manifestURL: manifestURL, ahapURL: ahapURL)
+                if let zipURL = viewModel.trailerZipURL {
+                    HapticTrailerPlayerView(zipURL: zipURL)
                 }
             }
         }

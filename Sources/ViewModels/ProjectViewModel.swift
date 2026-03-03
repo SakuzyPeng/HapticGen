@@ -25,8 +25,7 @@ final class ProjectViewModel: ObservableObject {
     @Published var errorMessage: String?
     @Published var exportedAHAPPath: String = "-"
 
-    @Published var trailerManifestURL: URL?
-    @Published var trailerAHAPURL: URL?
+    @Published var trailerZipURL: URL?
     @Published var showTrailerPlayer: Bool = false
 
     private let analyzer = AudioAnalyzer()
@@ -169,11 +168,10 @@ final class ProjectViewModel: ObservableObject {
 
         do {
             try exporter.exportAHAP(descriptor, to: ahapURL)
-            let manifestURL = try HLSPackager().package(audioURL: audioURL, ahapURL: ahapURL)
-            trailerAHAPURL = ahapURL
-            trailerManifestURL = manifestURL
+            let zipURL = try HLSPackager().package(audioURL: audioURL, ahapURL: ahapURL)
+            trailerZipURL = zipURL
             showTrailerPlayer = true
-            statusMessage = "Haptic Trailer 已生成：\(manifestURL.lastPathComponent)"
+            statusMessage = "Haptic Trailer 已生成：\(zipURL.lastPathComponent)"
         } catch {
             showError(error)
         }

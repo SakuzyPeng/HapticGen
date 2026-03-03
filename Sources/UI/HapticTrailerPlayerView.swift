@@ -2,8 +2,7 @@ import SwiftUI
 import CoreHaptics
 
 struct HapticTrailerPlayerView: View {
-    let manifestURL: URL
-    let ahapURL: URL
+    let zipURL: URL
 
     @State private var player = HapticTrailerPlayer()
     @State private var isPlaying = false
@@ -17,7 +16,7 @@ struct HapticTrailerPlayerView: View {
         NavigationStack {
             ScrollView {
                 VStack(alignment: .leading, spacing: 16) {
-                    manifestInfoSection
+                    packageInfoSection
                     playbackSection
                     shareSection
                 }
@@ -47,11 +46,10 @@ struct HapticTrailerPlayerView: View {
 
     // MARK: - Sections
 
-    private var manifestInfoSection: some View {
-        GroupBox("清单信息") {
+    private var packageInfoSection: some View {
+        GroupBox("包信息") {
             VStack(alignment: .leading, spacing: 8) {
-                infoRow(label: "m3u8", value: manifestURL.lastPathComponent)
-                infoRow(label: "AHAP", value: ahapURL.lastPathComponent)
+                infoRow(label: "文件", value: zipURL.lastPathComponent)
                 infoRow(label: "HLS 标签", value: "com.apple.hls.haptics.url")
                 infoRow(
                     label: "触觉支持",
@@ -103,7 +101,7 @@ struct HapticTrailerPlayerView: View {
                 .frame(maxWidth: .infinity)
 
                 if !isLoaded {
-                    ProgressView("加载清单中…")
+                    ProgressView("加载中…")
                         .frame(maxWidth: .infinity)
                 }
             }
@@ -113,26 +111,10 @@ struct HapticTrailerPlayerView: View {
     private var shareSection: some View {
         GroupBox("导出") {
             VStack(alignment: .leading, spacing: 10) {
-                // 完整包：清单 + AHAP + 音频（m3u8 里的路径是本地 file://，
-                // 对方收到后路径失效；带上音频文件才能完整复现播放）
-                if let audioURL = player.loadedAudioURL {
-                    ShareLink(
-                        "完整包（清单 + AHAP + 音频）",
-                        items: [manifestURL, ahapURL, audioURL]
-                    )
+                ShareLink("分享 Haptic Trailer 包", item: zipURL)
                     .buttonStyle(.borderedProminent)
-                } else {
-                    ShareLink(
-                        "分享清单 + AHAP",
-                        items: [manifestURL, ahapURL]
-                    )
-                    .buttonStyle(.borderedProminent)
-                }
 
-                ShareLink("仅 AHAP", item: ahapURL)
-                    .buttonStyle(.bordered)
-
-                Text("m3u8 内的音频路径为本地 file://，完整播放需一并分享音频文件。")
+                Text("zip 包内含清单、AHAP 和音频，接收方用本 App 打开即可播放。")
                     .font(.caption2)
                     .foregroundStyle(.secondary)
             }
@@ -155,7 +137,7 @@ struct HapticTrailerPlayerView: View {
 
     private func loadPlayer() async {
         do {
-            try player.load(manifestURL: manifestURL)
+            try player.load(manifestURL: zipURL)
             isLoaded = true
         } catch {
             errorMessage = error.localizedDescription
