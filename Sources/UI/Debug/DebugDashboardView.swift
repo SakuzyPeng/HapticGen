@@ -3,8 +3,16 @@ import UniformTypeIdentifiers
 
 struct DebugDashboardView: View {
     @StateObject private var viewModel = ProjectViewModel()
+    @AppStorage(AppLanguage.storageKey) private var languageOverrideRawValue: String = AppLanguage.auto.rawValue
     @State private var isImporterPresented = false
     @State private var isPackaging = false
+
+    private var languageSelection: Binding<AppLanguage> {
+        Binding(
+            get: { AppLanguage.resolved(rawValue: languageOverrideRawValue) },
+            set: { languageOverrideRawValue = $0.rawValue }
+        )
+    }
 
     var body: some View {
         NavigationStack {
@@ -18,7 +26,20 @@ struct DebugDashboardView: View {
                 }
                 .padding(16)
             }
-            .navigationTitle("AudioHaptic Debug")
+            .navigationTitle(L10n.debugNavigationTitle)
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Menu {
+                        Picker(L10n.languageMenuTitle, selection: languageSelection) {
+                            ForEach(AppLanguage.allCases) { language in
+                                Text(L10n.languageOption(language)).tag(language)
+                            }
+                        }
+                    } label: {
+                        Image(systemName: "globe")
+                    }
+                }
+            }
             .fileImporter(
                 isPresented: $isImporterPresented,
                 allowedContentTypes: [.audio],
@@ -33,7 +54,7 @@ struct DebugDashboardView: View {
                     viewModel.errorMessage = error.localizedDescription
                 }
             }
-            .alert("错误", isPresented: Binding(
+            .alert(L10n.commonAlertErrorTitle, isPresented: Binding(
                 get: { viewModel.errorMessage != nil },
                 set: { newValue in
                     if !newValue {
@@ -41,7 +62,7 @@ struct DebugDashboardView: View {
                     }
                 }
             )) {
-                Button("确定", role: .cancel) {
+                Button(L10n.commonButtonOK, role: .cancel) {
                     viewModel.errorMessage = nil
                 }
             } message: {
@@ -56,32 +77,32 @@ struct DebugDashboardView: View {
     }
 
     private var importSection: some View {
-        GroupBox("导入") {
+        GroupBox(L10n.debugSectionImport) {
             VStack(alignment: .leading, spacing: 10) {
-                Button("导入音频") {
+                Button(L10n.debugButtonImportAudio) {
                     isImporterPresented = true
                 }
                 .buttonStyle(.borderedProminent)
 
-                Text("文件：\(viewModel.fileName)")
-                Text("声道：\(viewModel.channelCount)")
-                Text("时长：\(viewModel.durationText)")
+                Text(L10n.debugFile(viewModel.fileName))
+                Text(L10n.debugChannel(viewModel.channelCount))
+                Text(L10n.debugDuration(viewModel.durationText))
             }
             .frame(maxWidth: .infinity, alignment: .leading)
         }
     }
 
     private var actionSection: some View {
-        GroupBox("操作") {
+        GroupBox(L10n.debugSectionAction) {
             VStack(alignment: .leading, spacing: 10) {
                 HStack(spacing: 8) {
-                    Button("Analyze") {
+                    Button(L10n.debugButtonAnalyze) {
                         viewModel.analyzeAudio()
                     }
                     .buttonStyle(.borderedProminent)
                     .disabled(viewModel.isAnalyzing || viewModel.selectedAudioURL == nil)
 
-                    Button("Generate") {
+                    Button(L10n.debugButtonGenerate) {
                         viewModel.generatePattern()
                     }
                     .buttonStyle(.bordered)
@@ -89,18 +110,18 @@ struct DebugDashboardView: View {
                 }
 
                 HStack(spacing: 8) {
-                    Button(viewModel.isPlaying ? "Pause" : "Play") {
+                    Button(viewModel.isPlaying ? L10n.debugButtonPause : L10n.debugButtonPlay) {
                         viewModel.togglePlayback()
                     }
                     .buttonStyle(.bordered)
                     .disabled(viewModel.patternDescriptor == nil)
 
-                    Button("Stop") {
+                    Button(L10n.debugButtonStop) {
                         viewModel.stopPlayback()
                     }
                     .buttonStyle(.bordered)
 
-                    Button("Export .ahap") {
+                    Button(L10n.debugButtonExportAHAP) {
                         viewModel.exportAHAP()
                     }
                     .buttonStyle(.bordered)
@@ -119,7 +140,7 @@ struct DebugDashboardView: View {
                             ProgressView()
                                 .scaleEffect(0.8)
                         }
-                        Text("Package Haptic Trailer")
+                        Text(L10n.debugButtonPackageTrailer)
                     }
                 }
                 .buttonStyle(.borderedProminent)
@@ -135,10 +156,10 @@ struct DebugDashboardView: View {
     }
 
     private var sliderSection: some View {
-        GroupBox("参数") {
+        GroupBox(L10n.debugSectionParameters) {
             VStack(alignment: .leading, spacing: 12) {
                 sliderRow(
-                    title: "强度倍率",
+                    title: L10n.debugSliderIntensityScale,
                     value: Binding(
                         get: { Double(viewModel.settings.intensityScale) },
                         set: { viewModel.updateIntensityScale(Float($0)) }
@@ -147,7 +168,7 @@ struct DebugDashboardView: View {
                 )
 
                 sliderRow(
-                    title: "清晰度偏移",
+                    title: L10n.debugSliderSharpnessBias,
                     value: Binding(
                         get: { Double(viewModel.settings.sharpnessBias) },
                         set: { viewModel.updateSharpnessBias(Float($0)) }
@@ -156,7 +177,7 @@ struct DebugDashboardView: View {
                 )
 
                 sliderRow(
-                    title: "事件密度",
+                    title: L10n.debugSliderEventDensity,
                     value: Binding(
                         get: { Double(viewModel.settings.eventDensity) },
                         set: { viewModel.updateEventDensity(Float($0)) }
@@ -165,7 +186,7 @@ struct DebugDashboardView: View {
                 )
 
                 sliderRow(
-                    title: "瞬态灵敏度",
+                    title: L10n.debugSliderTransientSensitivity,
                     value: Binding(
                         get: { Double(viewModel.settings.transientSensitivity) },
                         set: { viewModel.updateTransientSensitivity(Float($0)) }
@@ -178,26 +199,26 @@ struct DebugDashboardView: View {
     }
 
     private var resultSection: some View {
-        GroupBox("结果") {
+        GroupBox(L10n.debugSectionResult) {
             VStack(alignment: .leading, spacing: 8) {
                 if let analysis = viewModel.analysisResult {
                     let totalFrames = analysis.channels.first?.frames.count ?? 0
-                    Text("分析帧数：\(totalFrames)")
-                    Text("布局：\(analysis.layout.channelCount)ch")
+                    Text(L10n.debugAnalysisFrames(totalFrames))
+                    Text(L10n.debugLayout(analysis.layout.channelCount))
                 } else {
-                    Text("分析帧数：-")
+                    Text(L10n.debugAnalysisFramesEmpty)
                 }
 
                 if let descriptor = viewModel.patternDescriptor {
-                    Text("瞬态数量：\(descriptor.transientEvents.count)")
-                    Text("Intensity 点数：\(descriptor.intensityCurvePoints.count)")
-                    Text("Sharpness 点数：\(descriptor.sharpnessCurvePoints.count)")
+                    Text(L10n.debugTransientCount(descriptor.transientEvents.count))
+                    Text(L10n.debugIntensityPoints(descriptor.intensityCurvePoints.count))
+                    Text(L10n.debugSharpnessPoints(descriptor.sharpnessCurvePoints.count))
                 } else {
-                    Text("瞬态数量：-")
-                    Text("曲线点数：-")
+                    Text(L10n.debugTransientCountEmpty)
+                    Text(L10n.debugCurvePointsEmpty)
                 }
 
-                Text("导出路径：\(viewModel.exportedAHAPPath)")
+                Text(L10n.debugExportPath(viewModel.exportedAHAPPath))
                     .textSelection(.enabled)
             }
             .frame(maxWidth: .infinity, alignment: .leading)
@@ -205,7 +226,7 @@ struct DebugDashboardView: View {
     }
 
     private var statusSection: some View {
-        GroupBox("状态") {
+        GroupBox(L10n.debugSectionStatus) {
             Text(viewModel.statusMessage)
                 .frame(maxWidth: .infinity, alignment: .leading)
         }

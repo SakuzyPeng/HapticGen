@@ -9,7 +9,7 @@ public final class HapticGenerator: @unchecked Sendable {
         settings: GeneratorSettings
     ) throws -> HapticPatternDescriptor {
         guard !analysis.channels.isEmpty else {
-            throw AudioHapticError.generationFailed("分析结果为空")
+            throw AudioHapticError.generationFailed(L10n.Key.errorDetailEmptyAnalysisResult)
         }
 
         let labels = analysis.channels.map(\.label)
@@ -19,7 +19,7 @@ public final class HapticGenerator: @unchecked Sendable {
         let frameCount = analysis.channels.map { $0.frames.count }.min() ?? 0
 
         guard frameCount > 0 else {
-            throw AudioHapticError.generationFailed("没有可用帧数据")
+            throw AudioHapticError.generationFailed(L10n.Key.errorDetailNoFramesAvailable)
         }
 
         let intensityWeights = resolvedMapping.normalizedWeights(for: .intensity, availableLabels: labels)

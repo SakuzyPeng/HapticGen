@@ -55,7 +55,7 @@ public final class HapticTrailerPlayer {
 
     public func play() throws {
         guard let audioPlayer, let loadedPattern else {
-            throw AudioHapticError.playbackFailed("请先 load 清单")
+            throw AudioHapticError.playbackFailed(L10n.Key.errorDetailLoadManifestFirst)
         }
 
         let engine = try makeOrReuseEngine()
@@ -77,7 +77,7 @@ public final class HapticTrailerPlayer {
 
     public func seek(to time: TimeInterval) throws {
         guard let audioPlayer else {
-            throw AudioHapticError.playbackFailed("请先 load 清单")
+            throw AudioHapticError.playbackFailed(L10n.Key.errorDetailLoadManifestFirst)
         }
         let bounded = max(0, min(time, audioPlayer.duration))
         audioPlayer.currentTime = bounded
@@ -107,7 +107,7 @@ public final class HapticTrailerPlayer {
 
         let contents = try fm.contentsOfDirectory(at: destDir, includingPropertiesForKeys: nil)
         guard let found = contents.first(where: { $0.pathExtension.lowercased() == "m3u8" }) else {
-            throw AudioHapticError.invalidAnalysis("zip 包中未找到 .m3u8 清单")
+            throw AudioHapticError.invalidAnalysis(L10n.Key.errorDetailManifestNotFoundInZip)
         }
         return found
     }
@@ -133,8 +133,8 @@ public final class HapticTrailerPlayer {
             }
         }
 
-        guard let ahap  = ahapURL  else { throw AudioHapticError.invalidAnalysis("清单缺少 AHAP URL") }
-        guard let audio = audioURL else { throw AudioHapticError.invalidAnalysis("清单缺少音频 URL") }
+        guard let ahap  = ahapURL  else { throw AudioHapticError.invalidAnalysis(L10n.Key.errorDetailManifestMissingAHAPURL) }
+        guard let audio = audioURL else { throw AudioHapticError.invalidAnalysis(L10n.Key.errorDetailManifestMissingAudioURL) }
         return (ahap, audio)
     }
 

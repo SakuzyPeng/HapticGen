@@ -48,7 +48,7 @@ public struct HLSPackager: Sendable {
             #EXT-X-ENDLIST
             """
         guard let data = manifest.data(using: .utf8) else {
-            throw AudioHapticError.exportFailed("清单编码失败")
+            throw AudioHapticError.exportFailed(L10n.Key.errorDetailManifestEncodingFailed)
         }
         try data.write(to: workDir.appendingPathComponent("manifest.m3u8"), options: .atomic)
 

@@ -23,11 +23,14 @@ targets:
     deploymentTarget: "26.0"
     sources:
       - Sources
-    resources:
-      - Resources
+      - path: Resources
+        buildPhase: resources
     info:
       path: Sources/Info.plist
       properties:
+        CFBundleDisplayName: Haptic Gen
+        CFBundleShortVersionString: "0.1.0"
+        CFBundleVersion: "1"
         UILaunchScreen: {}
         UISupportedInterfaceOrientations:
           - UIInterfaceOrientationPortrait

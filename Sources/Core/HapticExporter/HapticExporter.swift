@@ -24,7 +24,9 @@ public final class HapticExporter: @unchecked Sendable {
             try exportAHAP(descriptor, to: temporaryURL)
             return try CHHapticPattern(contentsOf: temporaryURL)
         } catch {
-            throw AudioHapticError.exportFailed("无法构建 CHHapticPattern: \(error.localizedDescription)")
+            throw AudioHapticError.exportFailed(
+                L10n.errorDetailPatternBuildFailed(detail: error.localizedDescription)
+            )
         }
     }
 

@@ -11,17 +11,17 @@ public enum AudioHapticError: LocalizedError {
     public var errorDescription: String? {
         switch self {
         case .invalidAudioFormat:
-            return "无法解析音频格式。"
+            return L10n.errorInvalidAudioFormat
         case .unsupportedHaptics:
-            return "当前设备不支持触觉功能。"
+            return L10n.errorUnsupportedHaptics
         case .invalidAnalysis(let detail):
-            return "音频分析失败：\(detail)"
+            return L10n.errorAnalysisFailed(detail: detail)
         case .generationFailed(let detail):
-            return "触觉生成失败：\(detail)"
+            return L10n.errorGenerationFailed(detail: detail)
         case .exportFailed(let detail):
-            return "导出失败：\(detail)"
+            return L10n.errorExportFailed(detail: detail)
         case .playbackFailed(let detail):
-            return "播放失败：\(detail)"
+            return L10n.errorPlaybackFailed(detail: detail)
         }
     }
 }

@@ -54,7 +54,7 @@ public final class AudioAnalyzer: @unchecked Sendable {
                 pcmFormat: format,
                 frameCapacity: AVAudioFrameCount(max(framesToRead, 1))
             ) else {
-                throw AudioHapticError.invalidAnalysis("无法创建音频 buffer")
+                throw AudioHapticError.invalidAnalysis(L10n.Key.errorDetailAudioBufferCreationFailed)
             }
 
             try file.read(into: buffer, frameCount: AVAudioFrameCount(framesToRead))

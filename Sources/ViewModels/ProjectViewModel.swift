@@ -5,9 +5,9 @@ import CoreHaptics
 @MainActor
 final class ProjectViewModel: ObservableObject {
     @Published var selectedAudioURL: URL?
-    @Published var fileName: String = "-"
+    @Published var fileName: String = L10n.commonPlaceholderDash
     @Published var channelCount: Int = 0
-    @Published var durationText: String = "-"
+    @Published var durationText: String = L10n.commonPlaceholderDash
 
     @Published var settings: GeneratorSettings = .init()
     @Published var mapping: ChannelMapping = .init(intensity: [], sharpness: [], transient: [])
@@ -21,9 +21,9 @@ final class ProjectViewModel: ObservableObject {
     @Published var isGenerating: Bool = false
     @Published var isPlaying: Bool = false
 
-    @Published var statusMessage: String = "请选择音频文件"
+    @Published var statusMessage: String = L10n.statusSelectAudio
     @Published var errorMessage: String?
-    @Published var exportedAHAPPath: String = "-"
+    @Published var exportedAHAPPath: String = L10n.commonPlaceholderDash
 
     @Published var trailerZipURL: URL?
     @Published var showTrailerPlayer: Bool = false
@@ -48,13 +48,13 @@ final class ProjectViewModel: ObservableObject {
             let file = try AVAudioFile(forReading: localURL)
             channelCount = Int(file.processingFormat.channelCount)
             durationText = Self.formatDuration(Double(file.length) / file.processingFormat.sampleRate)
-            statusMessage = "已导入音频，点击 Analyze 开始分析"
+            statusMessage = L10n.statusImportReady
 
             analysisResult = nil
             patternDescriptor = nil
             generatedPattern = nil
             mapping = .init(intensity: [], sharpness: [], transient: [])
-            exportedAHAPPath = "-"
+            exportedAHAPPath = L10n.commonPlaceholderDash
         } catch {
             showError(AudioHapticError.invalidAudioFormat)
         }
@@ -62,13 +62,13 @@ final class ProjectViewModel: ObservableObject {
 
     func analyzeAudio() {
         guard let selectedAudioURL else {
-            showError(AudioHapticError.invalidAnalysis("请先导入音频"))
+            showError(AudioHapticError.invalidAnalysis(L10n.Key.errorDetailImportAudioFirst))
             return
         }
 
         isAnalyzing = true
         analysisProgress = 0
-        statusMessage = "分析中..."
+        statusMessage = L10n.statusAnalyzing
 
         Task {
             do {
@@ -80,7 +80,7 @@ final class ProjectViewModel: ObservableObject {
 
                 analysisResult = result
                 mapping = ChannelMapping.defaults(for: result.layout)
-                statusMessage = "分析完成：\(result.layout.channelCount)ch，可继续 Generate"
+                statusMessage = L10n.statusAnalysisCompleted(channelCount: result.layout.channelCount)
             } catch {
                 showError(error)
             }
@@ -91,7 +91,7 @@ final class ProjectViewModel: ObservableObject {
 
     func generatePattern() {
         guard let analysisResult else {
-            showError(AudioHapticError.generationFailed("请先完成分析"))
+            showError(AudioHapticError.generationFailed(L10n.Key.errorDetailCompleteAnalysisFirst))
             return
         }
 
@@ -104,7 +104,7 @@ final class ProjectViewModel: ObservableObject {
 
             patternDescriptor = descriptor
             generatedPattern = pattern
-            statusMessage = "生成完成：\(descriptor.transientEvents.count) 个瞬态事件"
+            statusMessage = L10n.statusGenerateCompleted(transientCount: descriptor.transientEvents.count)
         } catch {
             showError(error)
         }
@@ -112,19 +112,19 @@ final class ProjectViewModel: ObservableObject {
 
     func togglePlayback() {
         guard let selectedAudioURL else {
-            showError(AudioHapticError.playbackFailed("请先导入音频"))
+            showError(AudioHapticError.playbackFailed(L10n.Key.errorDetailImportAudioFirst))
             return
         }
 
         if isPlaying {
             player.pause()
             isPlaying = false
-            statusMessage = "已暂停"
+            statusMessage = L10n.statusPaused
             return
         }
 
         guard let generatedPattern else {
-            showError(AudioHapticError.playbackFailed("请先生成触觉 pattern"))
+            showError(AudioHapticError.playbackFailed(L10n.Key.errorDetailGeneratePatternFirst))
             return
         }
 
@@ -132,7 +132,7 @@ final class ProjectViewModel: ObservableObject {
             try player.prepare(audioURL: selectedAudioURL, pattern: generatedPattern)
             try player.play()
             isPlaying = true
-            statusMessage = "播放中"
+            statusMessage = L10n.statusPlaying
         } catch {
             showError(error)
         }
@@ -153,11 +153,11 @@ final class ProjectViewModel: ObservableObject {
 
     func packageHapticTrailer() async {
         guard let descriptor = patternDescriptor else {
-            showError(AudioHapticError.exportFailed("请先生成 pattern"))
+            showError(AudioHapticError.exportFailed(L10n.Key.errorDetailGeneratePatternFirst))
             return
         }
         guard let audioURL = selectedAudioURL else {
-            showError(AudioHapticError.exportFailed("缺少源音频文件"))
+            showError(AudioHapticError.exportFailed(L10n.Key.errorDetailSourceAudioMissing))
             return
         }
 
@@ -171,7 +171,7 @@ final class ProjectViewModel: ObservableObject {
             let zipURL = try HLSPackager().package(audioURL: audioURL, ahapURL: ahapURL)
             trailerZipURL = zipURL
             showTrailerPlayer = true
-            statusMessage = "Haptic Trailer 已生成：\(zipURL.lastPathComponent)"
+            statusMessage = L10n.statusTrailerPackaged(fileName: zipURL.lastPathComponent)
         } catch {
             showError(error)
         }
@@ -179,12 +179,12 @@ final class ProjectViewModel: ObservableObject {
 
     func exportAHAP() {
         guard let descriptor = patternDescriptor else {
-            showError(AudioHapticError.exportFailed("请先生成 pattern"))
+            showError(AudioHapticError.exportFailed(L10n.Key.errorDetailGeneratePatternFirst))
             return
         }
 
         guard let selectedAudioURL else {
-            showError(AudioHapticError.exportFailed("缺少源音频文件"))
+            showError(AudioHapticError.exportFailed(L10n.Key.errorDetailSourceAudioMissing))
             return
         }
 
@@ -194,7 +194,7 @@ final class ProjectViewModel: ObservableObject {
         do {
             try exporter.exportAHAP(descriptor, to: outputURL)
             exportedAHAPPath = outputURL.path
-            statusMessage = "导出成功：\(outputURL.lastPathComponent)"
+            statusMessage = L10n.statusExportSuccess(fileName: outputURL.lastPathComponent)
         } catch {
             showError(error)
         }
@@ -274,7 +274,7 @@ final class ProjectViewModel: ObservableObject {
 
     private func showError(_ error: Error) {
         errorMessage = (error as? LocalizedError)?.errorDescription ?? error.localizedDescription
-        statusMessage = "发生错误"
+        statusMessage = L10n.statusErrorOccurred
         isAnalyzing = false
         isGenerating = false
         isPlaying = false

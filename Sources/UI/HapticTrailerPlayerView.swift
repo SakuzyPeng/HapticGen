@@ -22,7 +22,7 @@ struct HapticTrailerPlayerView: View {
                 }
                 .padding(16)
             }
-            .navigationTitle("Haptic Trailer")
+            .navigationTitle(L10n.playerNavigationTitle)
             .navigationBarTitleDisplayMode(.inline)
             .task { await loadPlayer() }
             .onDisappear { player.stop() }
@@ -33,29 +33,27 @@ struct HapticTrailerPlayerView: View {
                     isPlaying = false
                 }
             }
-            .alert("错误", isPresented: Binding(
+            .alert(L10n.commonAlertErrorTitle, isPresented: Binding(
                 get: { errorMessage != nil },
                 set: { if !$0 { errorMessage = nil } }
             )) {
-                Button("确定", role: .cancel) { errorMessage = nil }
+                Button(L10n.commonButtonOK, role: .cancel) { errorMessage = nil }
             } message: {
                 Text(errorMessage ?? "")
             }
         }
     }
 
-    // MARK: - Sections
-
     private var packageInfoSection: some View {
-        GroupBox("包信息") {
+        GroupBox(L10n.playerSectionPackageInfo) {
             VStack(alignment: .leading, spacing: 8) {
-                infoRow(label: "文件", value: zipURL.lastPathComponent)
-                infoRow(label: "HLS 标签", value: "com.apple.hls.haptics.url")
+                infoRow(label: L10n.playerInfoFile, value: zipURL.lastPathComponent)
+                infoRow(label: L10n.playerInfoHLSTag, value: "com.apple.hls.haptics.url")
                 infoRow(
-                    label: "触觉支持",
+                    label: L10n.playerInfoHapticsSupport,
                     value: CHHapticEngine.capabilitiesForHardware().supportsHaptics
-                        ? "✓ 支持（真机）"
-                        : "✗ 不支持（模拟器）"
+                        ? L10n.playerInfoHapticsSupported
+                        : L10n.playerInfoHapticsUnsupported
                 )
             }
             .frame(maxWidth: .infinity, alignment: .leading)
@@ -63,7 +61,7 @@ struct HapticTrailerPlayerView: View {
     }
 
     private var playbackSection: some View {
-        GroupBox("播放控制") {
+        GroupBox(L10n.playerSectionPlayback) {
             VStack(spacing: 12) {
                 let duration = player.audioDuration
 
@@ -101,7 +99,7 @@ struct HapticTrailerPlayerView: View {
                 .frame(maxWidth: .infinity)
 
                 if !isLoaded {
-                    ProgressView("加载中…")
+                    ProgressView(L10n.playerLoading)
                         .frame(maxWidth: .infinity)
                 }
             }
@@ -109,12 +107,12 @@ struct HapticTrailerPlayerView: View {
     }
 
     private var shareSection: some View {
-        GroupBox("导出") {
+        GroupBox(L10n.playerSectionExport) {
             VStack(alignment: .leading, spacing: 10) {
-                ShareLink("分享 Haptic Trailer 包", item: zipURL)
+                ShareLink(L10n.playerShareButton, item: zipURL)
                     .buttonStyle(.borderedProminent)
 
-                Text("zip 包内含清单、AHAP 和音频，接收方用本 App 打开即可播放。")
+                Text(L10n.playerShareDescription)
                     .font(.caption2)
                     .foregroundStyle(.secondary)
             }
@@ -122,13 +120,11 @@ struct HapticTrailerPlayerView: View {
         }
     }
 
-    // MARK: - Helpers
-
     private func infoRow(label: String, value: String) -> some View {
         HStack(alignment: .top, spacing: 8) {
             Text(label + ":")
                 .foregroundStyle(.secondary)
-                .frame(width: 72, alignment: .leading)
+                .frame(width: 100, alignment: .leading)
             Text(value)
                 .textSelection(.enabled)
         }

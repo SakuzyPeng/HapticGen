@@ -40,10 +40,10 @@ public final class HapticPlayer {
 
     public func play() throws {
         guard let audioPlayer else {
-            throw AudioHapticError.playbackFailed("请先 prepare")
+            throw AudioHapticError.playbackFailed(L10n.Key.errorDetailPrepareFirst)
         }
         guard let pattern else {
-            throw AudioHapticError.playbackFailed("缺少触觉 pattern")
+            throw AudioHapticError.playbackFailed(L10n.Key.errorDetailPatternMissing)
         }
 
         let engine = try makeOrReuseEngine()
@@ -66,7 +66,7 @@ public final class HapticPlayer {
 
     public func seek(to time: TimeInterval) throws {
         guard let audioPlayer else {
-            throw AudioHapticError.playbackFailed("请先 prepare")
+            throw AudioHapticError.playbackFailed(L10n.Key.errorDetailPrepareFirst)
         }
 
         let bounded = max(0, min(time, audioPlayer.duration))
@@ -87,7 +87,7 @@ public final class HapticPlayer {
 
     public func sendLiveParameters(intensity: Float?, sharpness: Float?) throws {
         guard let advancedPlayer else {
-            throw AudioHapticError.playbackFailed("触觉播放器未准备")
+            throw AudioHapticError.playbackFailed(L10n.Key.errorDetailHapticPlayerNotPrepared)
         }
 
         var dynamicParameters: [CHHapticDynamicParameter] = []
