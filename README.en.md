@@ -6,6 +6,9 @@ An iOS tool application that automatically generates Apple AHAP (Haptic and Audi
 
 **Current version is an alpha demo (0.1.0-alpha) for feasibility validation.**
 
+> [!WARNING]
+> This project is in early development. Zip import/export is under verification with potential cross-device issues. Not recommended for production use.
+
 ## Features
 
 - **Multi-Channel Audio Analysis**: Support 2ch to 24ch (22.2-channel standard)
