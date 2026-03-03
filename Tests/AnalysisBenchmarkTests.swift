@@ -1,6 +1,6 @@
 import XCTest
 import AVFoundation
-@testable import AudioHapticGenerator
+@testable import HapticGen
 
 /// 分析性能基准测试
 ///

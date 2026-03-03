@@ -1,7 +1,7 @@
 import XCTest
 import Foundation
 import CoreHaptics
-@testable import AudioHapticGenerator
+@testable import HapticGen
 
 final class RealAudioAHAPIntegrationTests: XCTestCase {
     func testGenerateAHAPFromReal8chSample() async throws {

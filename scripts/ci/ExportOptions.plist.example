@@ -10,7 +10,7 @@
   <string>YOUR_TEAM_ID</string>
   <key>provisioningProfiles</key>
   <dict>
-    <key>com.sakuzy.AudioHapticGenerator</key>
+    <key>com.sakuzy.HapticGen</key>
     <string>YOUR_PROFILE_NAME</string>
   </dict>
   <key>stripSwiftSymbols</key>

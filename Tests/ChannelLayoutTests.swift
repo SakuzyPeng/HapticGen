@@ -1,5 +1,5 @@
 import XCTest
-@testable import AudioHapticGenerator
+@testable import HapticGen
 
 final class ChannelLayoutTests: XCTestCase {
     func testKnownLayouts() {

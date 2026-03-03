@@ -1,4 +1,4 @@
-name: AudioHapticGenerator
+name: HapticGen
 options:
   bundleIdPrefix: com.sakuzy
   deploymentTarget:
@@ -17,7 +17,7 @@ packages:
     from: "0.9.19"
 
 targets:
-  AudioHapticGenerator:
+  HapticGen:
     type: application
     platform: iOS
     deploymentTarget: "26.0"
@@ -43,7 +43,7 @@ targets:
             LSHandlerRank: Alternate
     settings:
       base:
-        PRODUCT_BUNDLE_IDENTIFIER: com.sakuzy.AudioHapticGenerator
+        PRODUCT_BUNDLE_IDENTIFIER: com.sakuzy.HapticGen
         DEVELOPMENT_TEAM: ""
         INFOPLIST_FILE: Sources/Info.plist
     dependencies:
@@ -53,7 +53,7 @@ targets:
       - package: ZIPFoundation
         product: ZIPFoundation
 
-  AudioHapticGeneratorTests:
+  HapticGenTests:
     type: bundle.unit-test
     platform: iOS
     deploymentTarget: "26.0"
@@ -63,4 +63,4 @@ targets:
       base:
         GENERATE_INFOPLIST_FILE: YES
     dependencies:
-      - target: AudioHapticGenerator
+      - target: HapticGen

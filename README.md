@@ -56,14 +56,14 @@ brew install xcodegen
 xcodegen generate
 
 # 3. 打开项目
-open AudioHapticGenerator.xcodeproj
+open HapticGen.xcodeproj
 ```
 
 ### 构建
 
 ```bash
 # Xcode 中构建（Cmd+B）或命令行
-xcodebuild build -scheme AudioHapticGenerator \
+xcodebuild build -scheme HapticGen \
   -destination 'platform=iOS Simulator,name=iPhone 17 Pro'
 ```
 
@@ -170,23 +170,23 @@ HapticPlayer / HapticTrailerPlayer  播放预览
 
 ```bash
 # 运行所有测试
-xcodebuild test -scheme AudioHapticGenerator \
+xcodebuild test -scheme HapticGen \
   -destination 'platform=iOS Simulator,name=iPhone 17 Pro'
 
 # 运行单个测试类
-xcodebuild test -scheme AudioHapticGenerator \
-  -only-testing AudioHapticGeneratorTests/AudioAnalyzerTests
+xcodebuild test -scheme HapticGen \
+  -only-testing HapticGenTests/AudioAnalyzerTests
 
 # 运行基准测试（可选，需要样本音频）
-xcodebuild test -scheme AudioHapticGenerator \
-  -only-testing AudioHapticGeneratorTests/AnalysisBenchmarkTests
+xcodebuild test -scheme HapticGen \
+  -only-testing HapticGenTests/AnalysisBenchmarkTests
 ```
 
 ## CI/CD（产出应用包）
 
 仓库内置了 GitHub Actions 流水线：[`.github/workflows/build-packages.yml`](.github/workflows/build-packages.yml)。
 
-1. `push master`：自动构建并上传 `AudioHapticGenerator-simulator-app.zip`（可用于模拟器测试）。
+1. `push master`：自动构建并上传 `HapticGen-simulator-app.zip`（可用于模拟器测试）。
 2. `workflow_dispatch`：
    - `package_type=simulator`：只产出模拟器包。
    - `package_type=ipa`：只产出签名 IPA。

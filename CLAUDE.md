@@ -4,11 +4,11 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## 项目概述
 
-AudioHapticGenerator 是一个 iOS 工具应用，从多声道音频文件自动生成 Apple AHAP（Haptic and Audio Pattern）触觉文件。支持立体声到 22.2 声道（24ch），使用 FFT 频谱分析提取触觉特征，并支持音频与触觉同步播放预览。
+Haptic Gen 是一个 iOS 工具应用，从多声道音频文件自动生成 Apple AHAP（Haptic and Audio Pattern）触觉文件。支持立体声到 22.2 声道（24ch），使用 FFT 频谱分析提取触觉特征，并支持音频与触觉同步播放预览。
 
 - **平台**：iOS 26.0+，Swift 6.0 严格并发模式
 - **依赖框架**：CoreHaptics、AVFoundation、Accelerate（vDSP）、SwiftUI
-- **Bundle ID**：com.sakuzy.AudioHapticGenerator
+- **Bundle ID**：com.sakuzy.HapticGen
 
 ## 构建与测试命令
 
@@ -19,13 +19,13 @@ AudioHapticGenerator 是一个 iOS 工具应用，从多声道音频文件自动
 xcodegen generate
 
 # 构建项目
-xcodebuild build -scheme AudioHapticGenerator -configuration Debug -destination 'platform=iOS Simulator,name=iPhone 16'
+xcodebuild build -scheme HapticGen -configuration Debug -destination 'platform=iOS Simulator,name=iPhone 16'
 
 # 运行所有测试
-xcodebuild test -scheme AudioHapticGenerator -destination 'platform=iOS Simulator,name=iPhone 16'
+xcodebuild test -scheme HapticGen -destination 'platform=iOS Simulator,name=iPhone 16'
 
 # 运行单个测试类
-xcodebuild test -scheme AudioHapticGenerator -destination 'platform=iOS Simulator,name=iPhone 16' -only-testing AudioHapticGeneratorTests/AudioAnalyzerTests
+xcodebuild test -scheme HapticGen -destination 'platform=iOS Simulator,name=iPhone 16' -only-testing HapticGenTests/AudioAnalyzerTests
 ```
 
 在 Xcode 中：`Cmd+B` 构建，`Cmd+U` 运行所有测试，`Cmd+R` 运行应用。

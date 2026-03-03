@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-PROJECT_PATH="${PROJECT_PATH:-AudioHapticGenerator.xcodeproj}"
-SCHEME_NAME="${SCHEME_NAME:-AudioHapticGenerator}"
-APP_BUNDLE_NAME="${APP_BUNDLE_NAME:-AudioHapticGenerator.app}"
+PROJECT_PATH="${PROJECT_PATH:-HapticGen.xcodeproj}"
+SCHEME_NAME="${SCHEME_NAME:-HapticGen}"
+APP_BUNDLE_NAME="${APP_BUNDLE_NAME:-HapticGen.app}"
 DERIVED_DATA_PATH="${DERIVED_DATA_PATH:-$PWD/build/DerivedData}"
 ARTIFACTS_DIR="${ARTIFACTS_DIR:-$PWD/build/artifacts}"
 
@@ -25,7 +25,7 @@ if [[ ! -d "$APP_PATH" ]]; then
 fi
 
 mkdir -p "$ARTIFACTS_DIR"
-ZIP_PATH="$ARTIFACTS_DIR/AudioHapticGenerator-simulator-app.zip"
+ZIP_PATH="$ARTIFACTS_DIR/HapticGen-simulator-app.zip"
 rm -f "$ZIP_PATH"
 
 ditto -c -k --sequesterRsrc --keepParent "$APP_PATH" "$ZIP_PATH"

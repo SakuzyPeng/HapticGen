@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-PROJECT_PATH="${PROJECT_PATH:-AudioHapticGenerator.xcodeproj}"
-SCHEME_NAME="${SCHEME_NAME:-AudioHapticGenerator}"
+PROJECT_PATH="${PROJECT_PATH:-HapticGen.xcodeproj}"
+SCHEME_NAME="${SCHEME_NAME:-HapticGen}"
 DERIVED_DATA_PATH="${DERIVED_DATA_PATH:-$PWD/build/DerivedData}"
-ARCHIVE_PATH="${ARCHIVE_PATH:-$PWD/build/archive/AudioHapticGenerator.xcarchive}"
+ARCHIVE_PATH="${ARCHIVE_PATH:-$PWD/build/archive/HapticGen.xcarchive}"
 EXPORT_PATH="${EXPORT_PATH:-$PWD/build/export}"
 RUNNER_TEMP_DIR="${RUNNER_TEMP:-/tmp}"
 

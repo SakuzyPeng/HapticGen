@@ -56,14 +56,14 @@ brew install xcodegen
 xcodegen generate
 
 # 3. Open project
-open AudioHapticGenerator.xcodeproj
+open HapticGen.xcodeproj
 ```
 
 ### Build
 
 ```bash
 # Build in Xcode (Cmd+B) or command line
-xcodebuild build -scheme AudioHapticGenerator \
+xcodebuild build -scheme HapticGen \
   -destination 'platform=iOS Simulator,name=iPhone 17 Pro'
 ```
 
@@ -170,23 +170,23 @@ HapticPlayer / HapticTrailerPlayer  Playback preview
 
 ```bash
 # Run all tests
-xcodebuild test -scheme AudioHapticGenerator \
+xcodebuild test -scheme HapticGen \
   -destination 'platform=iOS Simulator,name=iPhone 17 Pro'
 
 # Run single test class
-xcodebuild test -scheme AudioHapticGenerator \
-  -only-testing AudioHapticGeneratorTests/AudioAnalyzerTests
+xcodebuild test -scheme HapticGen \
+  -only-testing HapticGenTests/AudioAnalyzerTests
 
 # Run benchmark tests (optional, requires sample audio)
-xcodebuild test -scheme AudioHapticGenerator \
-  -only-testing AudioHapticGeneratorTests/AnalysisBenchmarkTests
+xcodebuild test -scheme HapticGen \
+  -only-testing HapticGenTests/AnalysisBenchmarkTests
 ```
 
 ## CI/CD (App Package Output)
 
 This repository includes a GitHub Actions pipeline: [`.github/workflows/build-packages.yml`](.github/workflows/build-packages.yml).
 
-1. `push master`: automatically builds and uploads `AudioHapticGenerator-simulator-app.zip` (for simulator testing).
+1. `push master`: automatically builds and uploads `HapticGen-simulator-app.zip` (for simulator testing).
 2. `workflow_dispatch`:
    - `package_type=simulator`: build simulator package only.
    - `package_type=ipa`: build signed IPA only.

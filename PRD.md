@@ -1,5 +1,5 @@
 # Product Requirements Document
-# AudioHapticGenerator
+# Haptic Gen
 
 **版本**：1.0
 **日期**：2026-02-28
@@ -11,7 +11,7 @@
 
 ### 1.1 产品定位
 
-AudioHapticGenerator 是一款面向内容创作者和音频工程师的 iOS 工具应用，能够从音频文件自动生成 Apple Haptic and Audio Pattern（AHAP）文件，并支持与音频、视频内容的同步播放。
+Haptic Gen 是一款面向内容创作者和音频工程师的 iOS 工具应用，能够从音频文件自动生成 Apple Haptic and Audio Pattern（AHAP）文件，并支持与音频、视频内容的同步播放。
 
 ### 1.2 核心价值
 

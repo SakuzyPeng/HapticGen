@@ -1,7 +1,7 @@
 import SwiftUI
 
 @main
-struct AudioHapticGeneratorApp: App {
+struct HapticGenApp: App {
     @AppStorage(AppLanguage.storageKey) private var languageOverrideRawValue: String = AppLanguage.auto.rawValue
     @State private var incomingZipURL: URL?
 

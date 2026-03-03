@@ -1,6 +1,6 @@
 import XCTest
 import Foundation
-@testable import AudioHapticGenerator
+@testable import HapticGen
 
 final class HapticExporterPipelineTests: XCTestCase {
     func testExporterCreatesValidAHAPJSON() throws {

@@ -1,5 +1,5 @@
 import XCTest
-@testable import AudioHapticGenerator
+@testable import HapticGen
 
 final class AudioAnalyzerTests: XCTestCase {
     func testAnalyzerProducesFramesForStereo() async throws {
