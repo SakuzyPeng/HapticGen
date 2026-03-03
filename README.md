@@ -2,12 +2,12 @@
 
 中文 | [English](README.en.md)
 
-一个 iOS 工具应用，从多声道音频文件自动生成 Apple AHAP（Haptic and Audio Pattern）触觉文件。支持立体声到 22.2 声道，使用 FFT 频谱分析提取触觉特征，并支持音频与触觉同步播放预览。
+一个 iOS 工具应用，从多声道音频文件自动生成 Apple AHAP（Haptic and Audio Pattern）触觉文件。支持立体声到 22.2 声道，使用 FFT 频谱分析提取触觉特征。当前版本聚焦分析与导出链路，不提供应用内预览播放。
 
 **当前版本为可行性验证的演示版本（0.1.0-alpha）。**
 
 > [!WARNING]
-> 本项目仍处于早期开发阶段。zip 导入导出功能尚在验证中，跨设备播放可能存在问题。不推荐用于生产环境。
+> 本项目仍处于早期开发阶段。zip 导入导出功能尚在验证中，不推荐用于生产环境。
 
 ## 功能
 
@@ -29,17 +29,11 @@
 - **Haptic Trailer 打包**（验证中）
   - 生成 HLS 清单 (.m3u8) + AHAP + 音频的 zip 包
   - 相对路径引用，跨设备解压后自动解析
-  - 一键分享完整包，接收方用本 App 打开即可播放
-
-- **实时播放预览**
-  - 音频与触觉同步播放（音频先 start，触觉紧接）
-  - 支持暂停、Seek、停止
-  - 实时参数调整（强度 / 清晰度）
+  - 仅验证文件打包与分发，不包含应用内播放预览
 
 ## 系统要求
 
 - iOS 26.0+
-- 真机播放触觉（iPhone 8 及以上，模拟器无触觉反馈但其他功能正常）
 - 音频格式：WAV, CAF, M4A, MP3, AIFF（由 AVAudioFile 支持）
 
 ## 安装 & 使用
@@ -88,7 +82,7 @@ xcodebuild build -scheme HapticGen \
 
 ### 3. 生成
 
-点击"Generate" -> 调整参数（可实时预览）
+点击"Generate" -> 调整参数并生成触觉模式
 
 可调参数：
 - 强度倍率：0.2x ~ 2.0x（整体触觉幅度）
@@ -98,26 +92,24 @@ xcodebuild build -scheme HapticGen \
 
 结果显示：瞬态事件数量、曲线控制点数
 
-### 4. 播放 & 导出
+### 4. 导出
 
-- Play/Pause：实时播放测试（音频 + 触觉同步）
 - Export .ahap：导出 AHAP JSON 文件（可用于其他应用）
 - Package Haptic Trailer：打包为 zip（音频 + AHAP + 清单）
 
-### 5. 分享 & 接收
+### 5. 分享 & 接收（文件）
 
 **发送方**：
-- 点击"Package Haptic Trailer" -> 弹出播放器 -> 点击分享 -> 分享 .zip 文件
+- 点击"Package Haptic Trailer" -> 分享 .zip 文件
 
 **接收方**：
 - 通过 AirDrop / 邮件 / Files App 接收 .zip
 - 在 Files App 长按 -> "用 Haptic Gen 打开"
-- App 自动解压并进入播放界面，点击▶播放
+- App 自动解压并导入资源（无内置播放）
 
 ## 示例文件
 
 - [2ch_haptic_trailer.ahap](Samples/2ch_haptic_trailer.ahap) - 生成的 AHAP 样品（2ch 音频）
-  - 在 iPhone Files App 中打开此文件即可预览
   - 包含 HapticContinuous（持续触觉）和 HapticTransient（瞬态触觉）事件
 
 ## 已知问题 & 待做
@@ -125,7 +117,7 @@ xcodebuild build -scheme HapticGen \
 **验证中：**
 - zip 导入导出
   - m3u8 使用相对路径，理论上应该有效
-  - 需要在真机上跨设备测试
+  - 当前仅验证文件结构与可解析性，不含播放链路
 
 **待优化：**
 - 性能优化：8ch FLAC 分析在模拟器上约 1.95s（RTF ≈ 164×），可接受但仍有优化空间
@@ -152,8 +144,6 @@ HapticGenerator.generate()       跨声道加权混合
 HapticPatternDescriptor          触觉模式中间表示
   ↓
 HapticExporter                   生成 CHHapticPattern + AHAP JSON
-  ↓
-HapticPlayer / HapticTrailerPlayer  播放预览
 ```
 
 ## 技术栈

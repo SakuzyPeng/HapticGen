@@ -2,12 +2,12 @@
 
 [中文](README.md) | English
 
-An iOS tool application that automatically generates Apple AHAP (Haptic and Audio Pattern) files from multi-channel audio. Supports stereo to 22.2-channel audio with FFT-based spectrum analysis for haptic feature extraction and real-time synchronized playback preview.
+An iOS tool application that automatically generates Apple AHAP (Haptic and Audio Pattern) files from multi-channel audio. Supports stereo to 22.2-channel audio with FFT-based spectrum analysis for haptic feature extraction. The current version focuses on analyze/generate/export and does not provide in-app playback preview.
 
 **Current version is an alpha demo (0.1.0-alpha) for feasibility validation.**
 
 > [!WARNING]
-> This project is in early development. Zip import/export is under verification with potential cross-device issues. Not recommended for production use.
+> This project is in early development. Zip import/export is under verification. Not recommended for production use.
 
 ## Features
 
@@ -29,17 +29,11 @@ An iOS tool application that automatically generates Apple AHAP (Haptic and Audi
 - **Haptic Trailer Packaging** (Under Verification)
   - Generate HLS manifest (.m3u8) + AHAP + audio as a zip package
   - Relative path references, auto-resolve after cross-device extraction
-  - One-click share complete package; recipients open with this app to play
-
-- **Real-Time Playback Preview**
-  - Audio and haptic synchronized playback (audio starts first, haptic follows immediately)
-  - Support pause, seek, stop
-  - Real-time parameter adjustment (intensity / sharpness)
+  - File packaging/distribution only; no in-app playback preview
 
 ## System Requirements
 
 - iOS 26.0+
-- Real device for haptic playback (iPhone 8 and above; simulator works for other features)
 - Audio formats: WAV, CAF, M4A, MP3, AIFF (supported by AVAudioFile)
 
 ## Installation & Setup
@@ -88,7 +82,7 @@ Click "Analyze"
 
 ### 3. Generate
 
-Click "Generate" -> Adjust parameters (real-time preview available)
+Click "Generate" -> Adjust parameters and produce a haptic pattern
 
 Adjustable parameters:
 - Intensity Scale: 0.2x ~ 2.0x (overall haptic amplitude)
@@ -98,26 +92,24 @@ Adjustable parameters:
 
 Results display: transient event count, curve control point count
 
-### 4. Playback & Export
+### 4. Export
 
-- Play/Pause: Real-time test playback (audio + haptic sync)
 - Export .ahap: Export AHAP JSON file (usable in other apps)
 - Package Haptic Trailer: Package as zip (audio + AHAP + manifest)
 
-### 5. Share & Receive
+### 5. Share & Receive (File-Level)
 
 **Sender**:
-- Click "Package Haptic Trailer" -> Player pops up -> Click share -> Share .zip file
+- Click "Package Haptic Trailer" -> Share .zip file
 
 **Receiver**:
 - Receive .zip via AirDrop / Email / Files App
 - Long press in Files App -> "Open with Haptic Gen"
-- App auto-extracts and enters playback interface; click play button
+- App auto-extracts and imports resources (no in-app playback)
 
 ## Sample Files
 
 - [2ch_haptic_trailer.ahap](Samples/2ch_haptic_trailer.ahap) - Generated AHAP sample (2ch audio)
-  - Open this file in iPhone Files App for preview
   - Contains HapticContinuous (continuous haptic) and HapticTransient (transient haptic) events
 
 ## Known Issues & TODO
@@ -125,7 +117,7 @@ Results display: transient event count, curve control point count
 **Under Verification:**
 - Zip import/export
   - m3u8 uses relative paths, should work in theory
-  - Needs real device cross-device testing
+  - Currently validating file structure/parsing only, not playback
 
 **Performance Optimizations:**
 - 8ch FLAC analysis on simulator ~1.95s (RTF ≈ 164×), acceptable but room for improvement
@@ -152,8 +144,6 @@ HapticGenerator.generate()       Cross-channel weighted blending
 HapticPatternDescriptor          Haptic pattern intermediate representation
   ↓
 HapticExporter                   Generate CHHapticPattern + AHAP JSON
-  ↓
-HapticPlayer / HapticTrailerPlayer  Playback preview
 ```
 
 ## Tech Stack
