@@ -6,36 +6,36 @@
 
 ## 功能
 
-- ✅ **多声道音频分析**：支持 2ch 至 24ch（22.2 声道标准）
+- **多声道音频分析**：支持 2ch 至 24ch（22.2 声道标准）
   - 使用 Accelerate/vDSP 进行 FFT 频谱分析
   - 分块流式处理，支持长音频文件（默认 30s 块）
   - 每声道独立并行分析，充分利用多核
 
-- ✅ **触觉特征提取**
+- **触觉特征提取**
   - RMS 强度（intensity）
   - 频谱重心（spectral centroid → sharpness）
   - 瞬态检测（transient events）
 
-- ✅ **AHAP 1.0 生成**
+- **AHAP 1.0 生成**
   - 跨声道加权混合（支持自定义权重配置）
   - 参数曲线简化（Ramer-Douglas-Peucker 算法，16384 控制点上限）
   - Transient / Continuous / ParameterCurve 三种事件类型覆盖
 
-- ✅ **Haptic Trailer 打包** [*验证中*]
+- **Haptic Trailer 打包**（验证中）
   - 生成 HLS 清单 (.m3u8) + AHAP + 音频的 zip 包
   - 相对路径引用，跨设备解压后自动解析
   - 一键分享完整包，接收方用本 App 打开即可播放
 
-- ✅ **实时播放预览**
+- **实时播放预览**
   - 音频与触觉同步播放（音频先 start，触觉紧接）
   - 支持暂停、Seek、停止
   - 实时参数调整（强度 / 清晰度）
 
 ## 系统要求
 
-- **iOS 26.0+**
-- **真机播放触觉**（iPhone 8 及以上，模拟器无触觉反馈但其他功能正常）
-- **音频格式**：WAV, CAF, M4A, MP3, AIFF（由 AVAudioFile 支持）
+- iOS 26.0+
+- 真机播放触觉（iPhone 8 及以上，模拟器无触觉反馈但其他功能正常）
+- 音频格式：WAV, CAF, M4A, MP3, AIFF（由 AVAudioFile 支持）
 
 ## 安装 & 使用
 
@@ -58,91 +58,90 @@ xcodebuild build -scheme AudioHapticGenerator \
 
 ### 1. 导入音频
 
-点击 **导入音频** → 选择本地多声道音频文件
+点击"导入音频" -> 选择本地多声道音频文件
 
 支持的格式：WAV、M4A、MP3、AIFF、CAF 等
 
 ### 2. 分析
 
-点击 **Analyze**
+点击"Analyze"
 - 自动检测声道数 & 布局（立体声 / 7.1 / 7.1.4 等）
 - FFT 分析提取触觉特征（进度条显示）
 - 完成后显示总帧数 & 布局
 
 ### 3. 生成
 
-点击 **Generate** → 调整参数（可实时预览）
+点击"Generate" -> 调整参数（可实时预览）
 
 可调参数：
-- **强度倍率**：0.2x ~ 2.0x（整体触觉幅度）
-- **清晰度偏移**：-0.5 ~ +0.5（频率感知）
-- **事件密度**：0.2x ~ 3.0x（瞬态触觉频繁度）
-- **瞬态灵敏度**：0.0 ~ 1.0（瞬态检测阈值）
+- 强度倍率：0.2x ~ 2.0x（整体触觉幅度）
+- 清晰度偏移：-0.5 ~ +0.5（频率感知）
+- 事件密度：0.2x ~ 3.0x（瞬态触觉频繁度）
+- 瞬态灵敏度：0.0 ~ 1.0（瞬态检测阈值）
 
 结果显示：瞬态事件数量、曲线控制点数
 
 ### 4. 播放 & 导出
 
-- **Play/Pause**：实时播放测试（音频 + 触觉同步）
-- **Export .ahap**：导出 AHAP JSON 文件（可用于其他应用）
-- **Package Haptic Trailer**：打包为 zip（音频 + AHAP + 清单）
+- Play/Pause：实时播放测试（音频 + 触觉同步）
+- Export .ahap：导出 AHAP JSON 文件（可用于其他应用）
+- Package Haptic Trailer：打包为 zip（音频 + AHAP + 清单）
 
 ### 5. 分享 & 接收
 
 **发送方**：
-- 点击 Package Haptic Trailer → 弹出播放器 → 点击分享 → 分享 .zip 文件
+- 点击"Package Haptic Trailer" -> 弹出播放器 -> 点击分享 -> 分享 .zip 文件
 
 **接收方**：
 - 通过 AirDrop / 邮件 / Files App 接收 .zip
-- 在 Files App 长按 → "用 Haptic Gen 打开"
-- App 自动解压并进入播放界面，点击 ▶ 播放
+- 在 Files App 长按 -> "用 Haptic Gen 打开"
+- App 自动解压并进入播放界面，点击▶播放
 
 ## 已知问题 & 待做
 
-- [ ] **zip 导入导出验证**：跨设备实际传输和播放尚未完整验证
+**验证中：**
+- zip 导入导出
   - m3u8 使用相对路径，理论上应该有效
   - 需要在真机上跨设备测试
 
-- [ ] **性能优化**
-  - 8ch FLAC 分析在模拟器上约 1.95s（RTF ≈ 164×），可接受但仍有优化空间
-  - 触觉曲线降采样可进一步优化
+**待优化：**
+- 性能优化：8ch FLAC 分析在模拟器上约 1.95s（RTF ≈ 164×），可接受但仍有优化空间
+- UI 完善：目前为调试仪表板（DebugDashboardView），尚未美化
+- 触觉曲线降采样：可进一步优化
+- 分析进度显示：仅为百分比，无详细信息
 
-- [ ] **UI 完善**
-  - 目前为调试仪表板（DebugDashboardView），尚未美化
-  - 分析进度显示仅为百分比，无详细信息
-
-- [ ] **扩展功能**
-  - 触觉预设（preset）支持
-  - 音频可视化
-  - 批量处理
+**未来扩展：**
+- 触觉预设（preset）支持
+- 音频可视化
+- 批量处理
 
 ## 架构概览
 
 ```
 音频文件
   ↓
-AudioAnalyzer.analyze()          [FFT 分析，并行处理多声道]
+AudioAnalyzer.analyze()          FFT 分析，并行处理多声道
   ↓
-MultiChannelAnalysisResult       [RMS / 频谱重心 / 瞬态帧序列]
+MultiChannelAnalysisResult       RMS / 频谱重心 / 瞬态帧序列
   ↓
-HapticGenerator.generate()       [跨声道加权混合]
+HapticGenerator.generate()       跨声道加权混合
   ↓
-HapticPatternDescriptor          [触觉模式中间表示]
+HapticPatternDescriptor          触觉模式中间表示
   ↓
-HapticExporter                   [生成 CHHapticPattern + AHAP JSON]
+HapticExporter                   生成 CHHapticPattern + AHAP JSON
   ↓
-HapticPlayer / HapticTrailerPlayer [播放预览]
+HapticPlayer / HapticTrailerPlayer  播放预览
 ```
 
 ## 技术栈
 
-- **Swift 6.0**（严格并发模式）
-- **CoreHaptics**（触觉引擎）
-- **AVFoundation**（音频处理）
-- **Accelerate / vDSP**（向量化 FFT 计算）
-- **ZIPFoundation**（zip 打包/解压）
-- **SwiftUI**（UI 界面）
-- **XcodeGen**（项目配置）
+- Swift 6.0（严格并发模式）
+- CoreHaptics（触觉引擎）
+- AVFoundation（音频处理）
+- Accelerate / vDSP（向量化 FFT 计算）
+- ZIPFoundation（zip 打包/解压）
+- SwiftUI（UI 界面）
+- XcodeGen（项目配置）
 
 ## 测试
 
