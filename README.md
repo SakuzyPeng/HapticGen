@@ -186,11 +186,19 @@ xcodebuild test -scheme HapticGen \
 
 仓库内置了 GitHub Actions 流水线：[`.github/workflows/build-packages.yml`](.github/workflows/build-packages.yml)。
 
-1. `push master`：自动构建并上传 `HapticGen-simulator-app.zip`，并在签名 secrets 完整时自动产出签名 IPA。
+1. `push master`：自动构建并上传 `HapticGen-simulator-app.zip` 与未签名 IPA 包（用于后续本地二次签名）。
 2. `workflow_dispatch`：
    - `package_type=simulator`：只产出模拟器包。
-   - `package_type=ipa`：只产出签名 IPA。
-   - `package_type=both`：同时产出两种包。
+   - `package_type=unsigned`：只产出未签名 IPA（用于后续本地二次签名）。
+   - `package_type=signed`：只产出签名 IPA。
+   - `package_type=both`：产出模拟器包 + 未签名 IPA。
+   - `package_type=all`：产出模拟器包 + 未签名 IPA + 签名 IPA。
+
+默认 `push master` 产出：
+1. `HapticGen-simulator-app.zip`
+2. `HapticGen-unsigned-ipa`（artifact 名）
+
+未签名 IPA 不能直接安装到 iPhone，需要用户用 Sideloadly/AltStore/ios-app-signer 等工具二次签名后再侧载。
 
 签名 IPA 需要预先配置以下 `GitHub Secrets`：
 
@@ -201,7 +209,7 @@ xcodebuild test -scheme HapticGen \
 5. `IOS_KEYCHAIN_PASSWORD`
 6. `IOS_TEAM_ID`
 
-若 secrets 未配置完整，`Build Signed IPA` 会在 `Validate signing secrets` 步骤失败。
+仅 `signed` / `all` 模式需要签名 secrets。若未配置完整，`Build Signed IPA` 会在 `Validate signing secrets` 步骤失败。
 
 可参考示例导出选项文件：[`scripts/ci/ExportOptions.plist.example`](scripts/ci/ExportOptions.plist.example)。
 
