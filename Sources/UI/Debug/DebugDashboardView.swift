@@ -4,6 +4,7 @@ import UniformTypeIdentifiers
 struct DebugDashboardView: View {
     @StateObject private var viewModel = ProjectViewModel()
     @State private var isImporterPresented = false
+    @State private var isPackaging = false
 
     var body: some View {
         NavigationStack {
@@ -45,6 +46,12 @@ struct DebugDashboardView: View {
                 }
             } message: {
                 Text(viewModel.errorMessage ?? "")
+            }
+            .sheet(isPresented: $viewModel.showTrailerPlayer) {
+                if let manifestURL = viewModel.trailerManifestURL,
+                   let ahapURL = viewModel.trailerAHAPURL {
+                    HapticTrailerPlayerView(manifestURL: manifestURL, ahapURL: ahapURL)
+                }
             }
         }
     }
@@ -100,6 +107,25 @@ struct DebugDashboardView: View {
                     .buttonStyle(.bordered)
                     .disabled(viewModel.patternDescriptor == nil)
                 }
+
+                Button {
+                    isPackaging = true
+                    Task {
+                        await viewModel.packageHapticTrailer()
+                        isPackaging = false
+                    }
+                } label: {
+                    HStack {
+                        if isPackaging {
+                            ProgressView()
+                                .scaleEffect(0.8)
+                        }
+                        Text("Package Haptic Trailer")
+                    }
+                }
+                .buttonStyle(.borderedProminent)
+                .tint(.purple)
+                .disabled(viewModel.patternDescriptor == nil || isPackaging)
 
                 if viewModel.isAnalyzing {
                     ProgressView(value: viewModel.analysisProgress)

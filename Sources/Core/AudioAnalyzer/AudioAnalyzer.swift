@@ -22,15 +22,23 @@ public final class AudioAnalyzer: @unchecked Sendable {
         let layout = ChannelLayout.detect(channelCount: channelCount)
         let totalFrames = max(Int(file.length), 1)
         let blockFrames = max(settings.fftSize, Int(sampleRate * settings.blockDuration))
-
         let log2n = vDSP_Length(log2(Float(settings.fftSize)))
-        guard let fftSetup = vDSP_create_fftsetup(log2n, FFTRadix(kFFTRadix2)) else {
-            throw AudioHapticError.invalidAnalysis("无法创建 FFT setup")
-        }
-        defer { vDSP_destroy_fftsetup(fftSetup) }
-
-        let hannWindow = vDSP.window(ofType: Float.self, usingSequence: .hanningDenormalized, count: settings.fftSize, isHalfWindow: false)
         let carryLength = max(settings.fftSize - settings.hopSize, 0)
+
+        let hannWindow = vDSP.window(
+            ofType: Float.self,
+            usingSequence: .hanningDenormalized,
+            count: settings.fftSize,
+            isHalfWindow: false
+        )
+
+        // 预计算频率 bin（整个分析过程恒定，避免每帧重建）
+        let halfFFT = settings.fftSize / 2
+        var binHzStep = Float(sampleRate) / Float(settings.fftSize)
+        var freqBinStart: Float = 0
+        var freqBins = [Float](repeating: 0, count: halfFFT)
+        vDSP_vramp(&freqBinStart, &binHzStep, &freqBins, 1, vDSP_Length(halfFFT))
+        let nyquist = Float(sampleRate / 2)
 
         var channelStates = (0..<channelCount).map { index in
             ChannelState(label: layout.labels[safe: index] ?? "Ch\(index + 1)")
@@ -51,30 +59,51 @@ public final class AudioAnalyzer: @unchecked Sendable {
 
             try file.read(into: buffer, frameCount: AVAudioFrameCount(framesToRead))
             let readFrames = Int(buffer.frameLength)
-            guard readFrames > 0 else {
-                break
-            }
+            guard readFrames > 0 else { break }
 
-            let channels = try extractFloatChannels(from: buffer, channelCount: channelCount)
+            let channelData = try extractFloatChannels(from: buffer, channelCount: channelCount)
 
-            for channelIndex in 0..<channelCount {
-                let existingCarry = channelStates[channelIndex].carry
-                let segmentStart = totalReadFrames - existingCarry.count
-                let segment = existingCarry + channels[channelIndex]
+            // 所有声道并行处理（每个 task 独立的 FFTSetup，无共享状态）
+            let capturedStates = channelStates
+            let capturedTotal = totalReadFrames
+            channelStates = try await withThrowingTaskGroup(of: (Int, ChannelState).self) { group in
+                for channelIndex in 0..<channelCount {
+                    let state = capturedStates[channelIndex]
+                    let samples = channelData[channelIndex]
+                    let segment = state.carry + samples
+                    let segmentStart = capturedTotal - state.carry.count
+                    let localHann = hannWindow
+                    let localFreqBins = freqBins
 
-                processChannelSegment(
-                    segment,
-                    channelIndex: channelIndex,
-                    segmentStartFrame: segmentStart,
-                    sampleRate: sampleRate,
-                    settings: settings,
-                    hannWindow: hannWindow,
-                    fftSetup: fftSetup,
-                    log2n: log2n,
-                    state: &channelStates[channelIndex]
-                )
+                    group.addTask {
+                        guard let localFFT = vDSP_create_fftsetup(log2n, FFTRadix(kFFTRadix2)) else {
+                            return (channelIndex, state)
+                        }
+                        defer { vDSP_destroy_fftsetup(localFFT) }
 
-                channelStates[channelIndex].carry = carryLength > 0 ? Array(segment.suffix(carryLength)) : []
+                        var localState = state
+                        Self.processChannelSegment(
+                            segment,
+                            segmentStartFrame: segmentStart,
+                            sampleRate: sampleRate,
+                            settings: settings,
+                            hannWindow: localHann,
+                            freqBins: localFreqBins,
+                            nyquist: nyquist,
+                            fftSetup: localFFT,
+                            log2n: log2n,
+                            state: &localState
+                        )
+                        localState.carry = carryLength > 0 ? Array(segment.suffix(carryLength)) : []
+                        return (channelIndex, localState)
+                    }
+                }
+
+                var result = capturedStates
+                for try await (index, state) in group {
+                    result[index] = state
+                }
+                return result
             }
 
             totalReadFrames += readFrames
@@ -84,23 +113,20 @@ public final class AudioAnalyzer: @unchecked Sendable {
         progress(1.0)
 
         let globalMaxRMS = max(
-            channelStates
-                .flatMap { $0.frames }
-                .map(\.rms)
-                .max() ?? 0,
+            channelStates.flatMap { $0.frames }.map(\.rms).max() ?? 0,
             0.000001
         )
 
         let channels = channelStates.map { state in
-            let marked = markTransients(frames: state.frames, cooldown: settings.transientCooldown)
+            let marked = Self.markTransients(frames: state.frames, cooldown: settings.transientCooldown)
             let maxFlux = max(marked.map(\.rawFlux).max() ?? 0, 0.000001)
 
             let frames = marked.map { frame in
                 ChannelFeatureFrame(
                     time: frame.time,
-                    rms: clamp01(frame.rms / globalMaxRMS),
-                    spectralCentroidNorm: clamp01(frame.centroidNorm),
-                    transientStrength: clamp01(frame.rawFlux / maxFlux),
+                    rms: Self.clamp01(frame.rms / globalMaxRMS),
+                    spectralCentroidNorm: Self.clamp01(frame.centroidNorm),
+                    transientStrength: Self.clamp01(frame.rawFlux / maxFlux),
                     isTransient: frame.isTransient
                 )
             }
@@ -116,20 +142,21 @@ public final class AudioAnalyzer: @unchecked Sendable {
         )
     }
 
-    private func processChannelSegment(
+    // MARK: - Channel Processing（static，供 @Sendable task 调用）
+
+    private static func processChannelSegment(
         _ segment: [Float],
-        channelIndex: Int,
         segmentStartFrame: Int,
         sampleRate: Double,
         settings: AnalyzerSettings,
         hannWindow: [Float],
+        freqBins: [Float],
+        nyquist: Float,
         fftSetup: FFTSetup,
         log2n: vDSP_Length,
         state: inout ChannelState
     ) {
-        guard segment.count >= settings.fftSize else {
-            return
-        }
+        guard segment.count >= settings.fftSize else { return }
 
         var frameStart = 0
         while frameStart + settings.fftSize <= segment.count {
@@ -139,51 +166,47 @@ public final class AudioAnalyzer: @unchecked Sendable {
                 continue
             }
 
+            // 加窗：vDSP.multiply 替代 zip().map(*)
             let frameSlice = Array(segment[frameStart..<(frameStart + settings.fftSize)])
-            let windowed = applyWindow(frameSlice, window: hannWindow)
+            let windowed = vDSP.multiply(frameSlice, hannWindow)
 
             let rms = computeRMS(windowed)
             let magnitudes = computeMagnitudes(windowed, fftSetup: fftSetup, log2n: log2n)
             let flux = spectralFlux(current: magnitudes, previous: state.previousMagnitudes)
-            let centroidHz = spectralCentroidHz(
+            let centroidHz = spectralCentroid(
                 magnitudes: magnitudes,
-                sampleRate: Float(sampleRate),
-                fftSize: settings.fftSize,
-                lastValid: state.lastValidCentroidHz
+                freqBins: freqBins,
+                lastValid: state.lastValidCentroidHz,
+                nyquist: nyquist
             )
 
             state.lastValidCentroidHz = centroidHz
             state.previousMagnitudes = magnitudes
 
-            let nyquist = Float(sampleRate / 2)
-            let centroidNorm = normalizeLogFrequency(centroidHz, nyquist: nyquist)
-            let time = Double(absoluteFrameStart) / sampleRate
-
-            state.frames.append(
-                PendingFeatureFrame(
-                    time: time,
-                    rms: rms,
-                    centroidNorm: centroidNorm,
-                    rawFlux: flux,
-                    isTransient: false
-                )
-            )
+            state.frames.append(PendingFeatureFrame(
+                time: Double(absoluteFrameStart) / sampleRate,
+                rms: rms,
+                centroidNorm: normalizeLogFrequency(centroidHz, nyquist: nyquist),
+                rawFlux: flux,
+                isTransient: false
+            ))
 
             frameStart += settings.hopSize
         }
     }
 
-    private func applyWindow(_ frame: [Float], window: [Float]) -> [Float] {
-        zip(frame, window).map(*)
-    }
+    // MARK: - vDSP-accelerated Math
 
-    private func computeRMS(_ samples: [Float]) -> Float {
+    /// RMS：vDSP_rmsqv 替代 reduce + sqrt
+    private static func computeRMS(_ samples: [Float]) -> Float {
         guard !samples.isEmpty else { return 0 }
-        let sum = samples.reduce(Float(0)) { $0 + ($1 * $1) }
-        return sqrt(sum / Float(samples.count))
+        var result: Float = 0
+        vDSP_rmsqv(samples, 1, &result, vDSP_Length(samples.count))
+        return result
     }
 
-    private func computeMagnitudes(_ samples: [Float], fftSetup: FFTSetup, log2n: vDSP_Length) -> [Float] {
+    /// FFT + 幅值：vvsqrtf 替代逐元素 Swift sqrt 循环
+    private static func computeMagnitudes(_ samples: [Float], fftSetup: FFTSetup, log2n: vDSP_Length) -> [Float] {
         let halfCount = samples.count / 2
         var real = [Float](repeating: 0, count: halfCount)
         var imag = [Float](repeating: 0, count: halfCount)
@@ -192,72 +215,72 @@ public final class AudioAnalyzer: @unchecked Sendable {
         real.withUnsafeMutableBufferPointer { realPtr in
             imag.withUnsafeMutableBufferPointer { imagPtr in
                 var split = DSPSplitComplex(realp: realPtr.baseAddress!, imagp: imagPtr.baseAddress!)
-
                 samples.withUnsafeBufferPointer { sourcePtr in
                     sourcePtr.baseAddress!.withMemoryRebound(to: DSPComplex.self, capacity: halfCount) { complexPtr in
                         vDSP_ctoz(complexPtr, 2, &split, 1, vDSP_Length(halfCount))
                     }
                 }
-
                 vDSP_fft_zrip(fftSetup, &split, 1, log2n, FFTDirection(FFT_FORWARD))
                 vDSP_zvmags(&split, 1, &magnitudes, 1, vDSP_Length(halfCount))
             }
         }
 
-        for index in magnitudes.indices {
-            magnitudes[index] = sqrt(max(magnitudes[index], 0))
-        }
+        // 向量化 sqrt（vvsqrtf）替代 for 循环
+        var sqrtInput = magnitudes
+        var count = Int32(halfCount)
+        vvsqrtf(&magnitudes, &sqrtInput, &count)
         return magnitudes
     }
 
-    private func spectralFlux(current: [Float], previous: [Float]?) -> Float {
-        guard let previous else {
-            return 0
-        }
-
+    /// Spectral Flux：vDSP 向量减法 + 阈值截断 + 求和，替代 Swift for 循环
+    private static func spectralFlux(current: [Float], previous: [Float]?) -> Float {
+        guard let previous else { return 0 }
         let count = min(current.count, previous.count)
-        guard count > 0 else {
-            return 0
-        }
+        guard count > 0 else { return 0 }
 
+        var diff = [Float](repeating: 0, count: count)
+        // diff = current - previous（vDSP_vsub: C = B - A）
+        vDSP_vsub(previous, 1, current, 1, &diff, 1, vDSP_Length(count))
+        // 半波整流：将负值截为 0（独立输出 buffer 避免 exclusive access 冲突）
+        var zero: Float = 0
+        var rectified = [Float](repeating: 0, count: count)
+        vDSP_vthres(diff, 1, &zero, &rectified, 1, vDSP_Length(count))
         var flux: Float = 0
-        for index in 0..<count {
-            let delta = current[index] - previous[index]
-            if delta > 0 {
-                flux += delta
-            }
-        }
+        vDSP_sve(rectified, 1, &flux, vDSP_Length(count))
         return flux
     }
 
-    private func spectralCentroidHz(
+    /// 频谱重心：vDSP_dotpr + vDSP_sve + 预计算 freqBins，替代 Swift enumerated 循环
+    private static func spectralCentroid(
         magnitudes: [Float],
-        sampleRate: Float,
-        fftSize: Int,
-        lastValid: Float
+        freqBins: [Float],
+        lastValid: Float,
+        nyquist: Float
     ) -> Float {
         guard !magnitudes.isEmpty else {
-            return lastValid > 0 ? lastValid : sampleRate * 0.25
+            return lastValid > 0 ? lastValid : nyquist * 0.25
         }
 
-        let binHz = sampleRate / Float(fftSize)
-        var numerator: Float = 0
         var denominator: Float = 0
-
-        for (index, value) in magnitudes.enumerated() {
-            let frequency = Float(index) * binHz
-            numerator += frequency * value
-            denominator += value
-        }
+        vDSP_sve(magnitudes, 1, &denominator, vDSP_Length(magnitudes.count))
 
         guard denominator > 0.000001 else {
-            return lastValid > 0 ? lastValid : sampleRate * 0.25
+            return lastValid > 0 ? lastValid : nyquist * 0.25
         }
+
+        var numerator: Float = 0
+        let usedCount = min(freqBins.count, magnitudes.count)
+        vDSP_dotpr(
+            freqBins, 1,
+            magnitudes, 1,
+            &numerator,
+            vDSP_Length(usedCount)
+        )
 
         return numerator / denominator
     }
 
-    private func normalizeLogFrequency(_ hz: Float, nyquist: Float) -> Float {
+    private static func normalizeLogFrequency(_ hz: Float, nyquist: Float) -> Float {
         guard nyquist > 0 else { return 0.5 }
         let safeHz = max(0, min(hz, nyquist))
         let numerator = log10(1 + safeHz)
@@ -266,7 +289,7 @@ public final class AudioAnalyzer: @unchecked Sendable {
         return numerator / denominator
     }
 
-    private func markTransients(
+    private static func markTransients(
         frames: [PendingFeatureFrame],
         cooldown: TimeInterval
     ) -> [PendingFeatureFrame] {
@@ -278,17 +301,14 @@ public final class AudioAnalyzer: @unchecked Sendable {
             let delta = value - mean
             return partial + (delta * delta)
         } / Float(fluxValues.count)
-        let std = sqrt(max(variance, 0))
-        let threshold = mean + (0.5 * std)
+        let threshold = mean + (0.5 * sqrt(max(variance, 0)))
 
         var mutable = frames
         var pendingIndex: Int?
 
         for index in mutable.indices {
             let frame = mutable[index]
-            guard frame.rawFlux >= threshold else {
-                continue
-            }
+            guard frame.rawFlux >= threshold else { continue }
 
             if let pending = pendingIndex {
                 let delta = frame.time - mutable[pending].time
@@ -312,6 +332,8 @@ public final class AudioAnalyzer: @unchecked Sendable {
         return mutable
     }
 
+    // MARK: - Audio Buffer Extraction
+
     private func extractFloatChannels(from buffer: AVAudioPCMBuffer, channelCount: Int) throws -> [[Float]] {
         let frames = Int(buffer.frameLength)
         guard frames > 0 else {
@@ -324,8 +346,7 @@ public final class AudioAnalyzer: @unchecked Sendable {
                 return strideInterleaved(interleaved: Array(interleaved), channels: channelCount, frames: frames)
             }
             return (0..<channelCount).map { channel in
-                let pointer = UnsafeBufferPointer(start: floatData[channel], count: frames)
-                return Array(pointer)
+                Array(UnsafeBufferPointer(start: floatData[channel], count: frames))
             }
         }
 
@@ -337,8 +358,7 @@ public final class AudioAnalyzer: @unchecked Sendable {
                 return strideInterleaved(interleaved: converted, channels: channelCount, frames: frames)
             }
             return (0..<channelCount).map { channel in
-                let pointer = UnsafeBufferPointer(start: int16Data[channel], count: frames)
-                return pointer.map { Float($0) * scale }
+                UnsafeBufferPointer(start: int16Data[channel], count: frames).map { Float($0) * scale }
             }
         }
 
@@ -350,8 +370,7 @@ public final class AudioAnalyzer: @unchecked Sendable {
                 return strideInterleaved(interleaved: converted, channels: channelCount, frames: frames)
             }
             return (0..<channelCount).map { channel in
-                let pointer = UnsafeBufferPointer(start: int32Data[channel], count: frames)
-                return pointer.map { Float($0) * scale }
+                UnsafeBufferPointer(start: int32Data[channel], count: frames).map { Float($0) * scale }
             }
         }
 
@@ -368,10 +387,12 @@ public final class AudioAnalyzer: @unchecked Sendable {
         return output
     }
 
-    private func clamp01(_ value: Float) -> Float {
+    private static func clamp01(_ value: Float) -> Float {
         max(0, min(1, value))
     }
 }
+
+// MARK: - Internal Types
 
 private struct PendingFeatureFrame: Sendable {
     let time: TimeInterval

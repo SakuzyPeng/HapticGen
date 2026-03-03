@@ -25,6 +25,10 @@ final class ProjectViewModel: ObservableObject {
     @Published var errorMessage: String?
     @Published var exportedAHAPPath: String = "-"
 
+    @Published var trailerManifestURL: URL?
+    @Published var trailerAHAPURL: URL?
+    @Published var showTrailerPlayer: Bool = false
+
     private let analyzer = AudioAnalyzer()
     private let generator = HapticGenerator()
     private let exporter = HapticExporter()
@@ -146,6 +150,33 @@ final class ProjectViewModel: ObservableObject {
     func stopPlayback() {
         player.stop()
         isPlaying = false
+    }
+
+    func packageHapticTrailer() async {
+        guard let descriptor = patternDescriptor else {
+            showError(AudioHapticError.exportFailed("请先生成 pattern"))
+            return
+        }
+        guard let audioURL = selectedAudioURL else {
+            showError(AudioHapticError.exportFailed("缺少源音频文件"))
+            return
+        }
+
+        let baseName = audioURL.deletingPathExtension().lastPathComponent
+        let ahapURL = FileManager.default.temporaryDirectory
+            .appendingPathComponent(baseName + "_haptic_trailer")
+            .appendingPathExtension("ahap")
+
+        do {
+            try exporter.exportAHAP(descriptor, to: ahapURL)
+            let manifestURL = try HLSPackager().package(audioURL: audioURL, ahapURL: ahapURL)
+            trailerAHAPURL = ahapURL
+            trailerManifestURL = manifestURL
+            showTrailerPlayer = true
+            statusMessage = "Haptic Trailer 已生成：\(manifestURL.lastPathComponent)"
+        } catch {
+            showError(error)
+        }
     }
 
     func exportAHAP() {
