@@ -1639,6 +1639,91 @@
         }
       }
     }
+    ,
+    "debug.button.separate" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Separate 5 Stems" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "分离 5 轨" } }
+      }
+    },
+    "debug.label.stemPicker" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Stem" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "音轨" } }
+      }
+    },
+    "stem.kind.vocals" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Vocals" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "人声" } }
+      }
+    },
+    "stem.kind.piano" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Piano" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "钢琴" } }
+      }
+    },
+    "stem.kind.drums" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Drums" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "鼓" } }
+      }
+    },
+    "stem.kind.bass" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Bass" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "贝斯" } }
+      }
+    },
+    "stem.kind.other" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Other" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "其他" } }
+      }
+    },
+    "status.separating" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Separating stems..." } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "正在分离音轨..." } }
+      }
+    },
+    "status.separationCompleted" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Stem separation completed" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "音轨分离完成" } }
+      }
+    },
+    "error.separationFailed.format" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Separation failed: %@" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "分离失败：%@" } }
+      }
+    },
+    "error.detail.modelNotFound" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Spleeter model file not found in app bundle" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "未找到 Spleeter 模型文件" } }
+      }
+    },
+    "error.detail.separateFirst" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Please complete stem separation first" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "请先完成音轨分离" } }
+      }
+    }
   },
   "version" : "1.0"
 }

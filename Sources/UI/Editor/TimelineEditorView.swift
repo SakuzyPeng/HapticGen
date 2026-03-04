@@ -348,3 +348,31 @@ struct TimelineEditorView: View {
         projectVM.showEditor = false
     }
 }
+
+@MainActor private func makePreviewVM() -> ProjectViewModel {
+    var frames: [ChannelFeatureFrame] = []
+    for i in 0..<300 {
+        let t = Double(i) / 30.0
+        let rms = Float(sin(t * 3.14) * 0.5 + 0.5)
+        let sc = Float(cos(t * 2.0) * 0.4 + 0.5)
+        let tr: Float = i % 30 == 0 ? 0.9 : 0.05
+        frames.append(ChannelFeatureFrame(time: t, rms: rms, spectralCentroidNorm: sc, transientStrength: tr, isTransient: i % 30 == 0))
+    }
+    let layout = ChannelLayout.detect(channelCount: 2)
+    let analysis = MultiChannelAnalysisResult(
+        duration: 10.0, sampleRate: 44100, layout: layout,
+        channels: [ChannelAnalysisResult(label: "L", frames: frames), ChannelAnalysisResult(label: "R", frames: frames)]
+    )
+    let mapping = ChannelMapping.defaults(for: layout)
+    let descriptor = try! HapticGenerator().generate(from: analysis, mapping: mapping, settings: GeneratorSettings())
+    let vm = ProjectViewModel()
+    vm.patternDescriptor = descriptor
+    vm.analysisResult = analysis
+    vm.mapping = mapping
+    vm.selectedAudioURL = URL(filePath: "/dev/null")
+    return vm
+}
+
+#Preview {
+    TimelineEditorView(projectVM: makePreviewVM())
+}

@@ -98,12 +98,40 @@ struct DebugDashboardView: View {
     private var actionSection: some View {
         GroupBox(L10n.debugSectionAction) {
             VStack(alignment: .leading, spacing: 10) {
+
+                // MARK: Separate 5-stem
+                Button(L10n.debugButtonSeparate) {
+                    viewModel.separateStems()
+                }
+                .buttonStyle(.borderedProminent)
+                .tint(.blue)
+                .disabled(viewModel.selectedAudioURL == nil || viewModel.isSeparating)
+
+                if viewModel.isSeparating {
+                    ProgressView(value: viewModel.separationProgress)
+                        .tint(.blue)
+                }
+
+                if viewModel.separationArtifacts != nil {
+                    Picker(L10n.debugLabelStemPicker, selection: Binding(
+                        get: { viewModel.selectedStem },
+                        set: { viewModel.selectStem($0) }
+                    )) {
+                        ForEach(StemKind.allCases, id: \.self) { stem in
+                            Text(stem.displayName).tag(stem)
+                        }
+                    }
+                    .pickerStyle(.segmented)
+                }
+
+                Divider()
+
                 HStack(spacing: 8) {
                     Button(L10n.debugButtonAnalyze) {
                         viewModel.analyzeAudio()
                     }
                     .buttonStyle(.borderedProminent)
-                    .disabled(viewModel.isAnalyzing || viewModel.selectedAudioURL == nil)
+                    .disabled(viewModel.separationArtifacts == nil || viewModel.isAnalyzing)
 
                     Button(L10n.debugButtonGenerate) {
                         viewModel.generatePattern()
@@ -250,4 +278,8 @@ struct DebugDashboardView: View {
             Slider(value: value, in: range)
         }
     }
+}
+
+#Preview {
+    DebugDashboardView()
 }

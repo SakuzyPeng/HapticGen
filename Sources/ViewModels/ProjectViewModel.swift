@@ -16,6 +16,12 @@ final class ProjectViewModel: ObservableObject {
     @Published var patternDescriptor: HapticPatternDescriptor?
     @Published var generatedPattern: CHHapticPattern?
 
+    // MARK: - Stem Separation State
+    @Published var isSeparating: Bool = false
+    @Published var separationProgress: Double = 0
+    @Published var selectedStem: StemKind = .default
+    @Published var separationArtifacts: StemSeparationArtifacts?
+
     @Published var analysisProgress: Double = 0
     @Published var isAnalyzing: Bool = false
     @Published var isGenerating: Bool = false
@@ -29,19 +35,35 @@ final class ProjectViewModel: ObservableObject {
     @Published var showTrailerPlayer: Bool = false
     @Published var showEditor: Bool = false
 
-    private let analyzer = AudioAnalyzer()
+    private let analyzer: AudioAnalyzer
+    private let stemSeparator: StemSeparating
     private let generator = HapticGenerator()
     private let exporter = HapticExporter()
     private let player = HapticPlayer()
 
     private var regenerateTask: Task<Void, Never>?
 
+    init(
+        analyzer: AudioAnalyzer = AudioAnalyzer(),
+        stemSeparator: StemSeparating = Spleeter5StemSeparator()
+    ) {
+        self.analyzer = analyzer
+        self.stemSeparator = stemSeparator
+    }
+
     deinit {
         regenerateTask?.cancel()
     }
 
+    // MARK: - Import
+
     func importAudio(url: URL) {
         do {
+            // 清理上一次的分离工作目录
+            if let prev = separationArtifacts?.workspaceDirectoryURL {
+                try? FileManager.default.removeItem(at: prev)
+            }
+
             let localURL = try makeLocalCopyIfNeeded(from: url)
             selectedAudioURL = localURL
             fileName = localURL.lastPathComponent
@@ -54,6 +76,9 @@ final class ProjectViewModel: ObservableObject {
             analysisResult = nil
             patternDescriptor = nil
             generatedPattern = nil
+            separationArtifacts = nil
+            isSeparating = false
+            separationProgress = 0
             mapping = .init(intensity: [], sharpness: [], transient: [])
             exportedAHAPPath = L10n.commonPlaceholderDash
         } catch {
@@ -61,11 +86,54 @@ final class ProjectViewModel: ObservableObject {
         }
     }
 
+    // MARK: - Stem Separation
+
+    func separateStems() {
+        guard let selectedAudioURL else { return }
+
+        isSeparating = true
+        separationProgress = 0
+        separationArtifacts = nil
+        analysisResult = nil
+        patternDescriptor = nil
+        generatedPattern = nil
+        statusMessage = L10n.statusSeparating
+
+        Task {
+            do {
+                let artifacts = try await stemSeparator.separate(
+                    inputURL: selectedAudioURL
+                ) { [weak self] progress in
+                    Task { @MainActor in
+                        self?.separationProgress = progress
+                    }
+                }
+                separationArtifacts = artifacts
+                statusMessage = L10n.statusSeparationCompleted
+            } catch {
+                showError(error)
+            }
+            isSeparating = false
+        }
+    }
+
+    func selectStem(_ stem: StemKind) {
+        guard stem != selectedStem else { return }
+        selectedStem = stem
+        analysisResult = nil
+        patternDescriptor = nil
+        generatedPattern = nil
+    }
+
+    // MARK: - Analyze
+
     func analyzeAudio() {
-        guard let selectedAudioURL else {
-            showError(AudioHapticError.invalidAnalysis(L10n.Key.errorDetailImportAudioFirst))
+        guard let artifacts = separationArtifacts else {
+            showError(AudioHapticError.invalidAnalysis(L10n.Key.errorDetailSeparateFirst))
             return
         }
+
+        let stemURL = artifacts.url(for: selectedStem)
 
         isAnalyzing = true
         analysisProgress = 0
@@ -73,7 +141,7 @@ final class ProjectViewModel: ObservableObject {
 
         Task {
             do {
-                let result = try await analyzer.analyze(url: selectedAudioURL) { [weak self] progress in
+                let result = try await analyzer.analyze(url: stemURL) { [weak self] progress in
                     Task { @MainActor in
                         self?.analysisProgress = progress
                     }
@@ -89,6 +157,8 @@ final class ProjectViewModel: ObservableObject {
             isAnalyzing = false
         }
     }
+
+    // MARK: - Generate
 
     func generatePattern() {
         guard let analysisResult else {
@@ -112,9 +182,11 @@ final class ProjectViewModel: ObservableObject {
         }
     }
 
+    // MARK: - Playback
+
     func togglePlayback() {
-        guard let selectedAudioURL else {
-            showError(AudioHapticError.playbackFailed(L10n.Key.errorDetailImportAudioFirst))
+        guard let audioURL = separationArtifacts?.url(for: selectedStem) else {
+            showError(AudioHapticError.playbackFailed(L10n.Key.errorDetailSeparateFirst))
             return
         }
 
@@ -131,7 +203,7 @@ final class ProjectViewModel: ObservableObject {
         }
 
         do {
-            try player.prepare(audioURL: selectedAudioURL, pattern: generatedPattern)
+            try player.prepare(audioURL: audioURL, pattern: generatedPattern)
             try player.play()
             isPlaying = true
             statusMessage = L10n.statusPlaying
@@ -153,17 +225,20 @@ final class ProjectViewModel: ObservableObject {
         isPlaying = false
     }
 
+    // MARK: - Export
+
     func packageHapticTrailer() async {
         guard let descriptor = patternDescriptor else {
             showError(AudioHapticError.exportFailed(L10n.Key.errorDetailGeneratePatternFirst))
             return
         }
-        guard let audioURL = selectedAudioURL else {
-            showError(AudioHapticError.exportFailed(L10n.Key.errorDetailSourceAudioMissing))
+        guard let audioURL = separationArtifacts?.url(for: selectedStem) else {
+            showError(AudioHapticError.exportFailed(L10n.Key.errorDetailSeparateFirst))
             return
         }
 
-        let baseName = audioURL.deletingPathExtension().lastPathComponent
+        let baseName = (selectedAudioURL?.deletingPathExtension().lastPathComponent ?? "output")
+            + "_\(selectedStem.rawValue)"
         let ahapURL = FileManager.default.temporaryDirectory
             .appendingPathComponent(baseName + "_haptic_trailer")
             .appendingPathExtension("ahap")
@@ -185,12 +260,8 @@ final class ProjectViewModel: ObservableObject {
             return
         }
 
-        guard let selectedAudioURL else {
-            showError(AudioHapticError.exportFailed(L10n.Key.errorDetailSourceAudioMissing))
-            return
-        }
-
-        let outputName = selectedAudioURL.deletingPathExtension().lastPathComponent + ".ahap"
+        let outputName = (selectedAudioURL?.deletingPathExtension().lastPathComponent ?? "output")
+            + "_\(selectedStem.rawValue).ahap"
         let outputURL = FileManager.default.temporaryDirectory.appendingPathComponent(outputName)
 
         do {
@@ -201,6 +272,8 @@ final class ProjectViewModel: ObservableObject {
             showError(error)
         }
     }
+
+    // MARK: - Settings
 
     func updateIntensityScale(_ value: Float) {
         settings = GeneratorSettings(
@@ -244,11 +317,10 @@ final class ProjectViewModel: ObservableObject {
         scheduleDebouncedRegeneration()
     }
 
-    private func sendLiveParametersIfPossible() {
-        guard isPlaying else {
-            return
-        }
+    // MARK: - Private
 
+    private func sendLiveParametersIfPossible() {
+        guard isPlaying else { return }
         do {
             try player.sendLiveParameters(
                 intensity: min(1, max(0, settings.intensityScale / 2.0)),
@@ -260,17 +332,12 @@ final class ProjectViewModel: ObservableObject {
     }
 
     private func scheduleDebouncedRegeneration() {
-        guard analysisResult != nil else {
-            return
-        }
-
+        guard analysisResult != nil else { return }
         regenerateTask?.cancel()
         regenerateTask = Task {
             try? await Task.sleep(nanoseconds: 300_000_000)
             guard !Task.isCancelled else { return }
-            await MainActor.run {
-                self.generatePattern()
-            }
+            await MainActor.run { self.generatePattern() }
         }
     }
 
@@ -280,6 +347,7 @@ final class ProjectViewModel: ObservableObject {
         isAnalyzing = false
         isGenerating = false
         isPlaying = false
+        isSeparating = false
     }
 
     private static func formatDuration(_ seconds: TimeInterval) -> String {
@@ -295,11 +363,7 @@ final class ProjectViewModel: ObservableObject {
 
         let destination = temporaryDirectory.appendingPathComponent(sourceURL.lastPathComponent)
         let scoped = sourceURL.startAccessingSecurityScopedResource()
-        defer {
-            if scoped {
-                sourceURL.stopAccessingSecurityScopedResource()
-            }
-        }
+        defer { if scoped { sourceURL.stopAccessingSecurityScopedResource() } }
 
         if FileManager.default.fileExists(atPath: destination.path) {
             try FileManager.default.removeItem(at: destination)

@@ -95,6 +95,23 @@ public enum L10n {
         static let errorDetailEmptyAnalysisResult = "error.detail.emptyAnalysisResult"
         static let errorDetailNoFramesAvailable = "error.detail.noFramesAvailable"
 
+        // MARK: Stem Separation
+        static let debugButtonSeparate = "debug.button.separate"
+        static let debugLabelStemPicker = "debug.label.stemPicker"
+
+        static let stemKindVocals = "stem.kind.vocals"
+        static let stemKindPiano = "stem.kind.piano"
+        static let stemKindDrums = "stem.kind.drums"
+        static let stemKindBass = "stem.kind.bass"
+        static let stemKindOther = "stem.kind.other"
+
+        static let statusSeparating = "status.separating"
+        static let statusSeparationCompleted = "status.separationCompleted"
+
+        static let errorSeparationFailedFormat = "error.separationFailed.format"
+        static let errorDetailModelNotFound = "error.detail.modelNotFound"
+        static let errorDetailSeparateFirst = "error.detail.separateFirst"
+
         // MARK: Editor
         static let editorNavigationTitle = "editor.navigation.title"
         static let editorTrackIntensity = "editor.track.intensity"
@@ -251,6 +268,27 @@ public enum L10n {
 
     public static func errorDetailPatternBuildFailed(detail: String) -> String {
         format(Key.errorDetailPatternBuildFailedFormat, detail)
+    }
+
+    // MARK: - Stem Separation
+
+    public static var debugButtonSeparate: String { text(Key.debugButtonSeparate) }
+    public static var debugLabelStemPicker: String { text(Key.debugLabelStemPicker) }
+    public static var statusSeparating: String { text(Key.statusSeparating) }
+    public static var statusSeparationCompleted: String { text(Key.statusSeparationCompleted) }
+
+    static func stemKindName(_ kind: StemKind) -> String {
+        switch kind {
+        case .vocals: return text(Key.stemKindVocals)
+        case .piano:  return text(Key.stemKindPiano)
+        case .drums:  return text(Key.stemKindDrums)
+        case .bass:   return text(Key.stemKindBass)
+        case .other:  return text(Key.stemKindOther)
+        }
+    }
+
+    public static func errorSeparationFailed(detail: String) -> String {
+        format(Key.errorSeparationFailedFormat, localizedDetail(detail))
     }
 
     // MARK: - Editor

@@ -15,6 +15,9 @@ packages:
   ZIPFoundation:
     url: https://github.com/weichsel/ZIPFoundation.git
     from: "0.9.19"
+  SwiftSpleeter:
+    url: https://github.com/jiyimeta/swift-spleeter.git
+    from: "0.2.0"
 
 targets:
   HapticGen:
@@ -50,8 +53,11 @@ targets:
       - sdk: CoreHaptics.framework
       - sdk: AVFoundation.framework
       - sdk: Accelerate.framework
+      - sdk: CoreML.framework
       - package: ZIPFoundation
         product: ZIPFoundation
+      - package: SwiftSpleeter
+        product: Spleeter
 
   HapticGenTests:
     type: bundle.unit-test

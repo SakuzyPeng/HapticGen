@@ -7,6 +7,7 @@ public enum AudioHapticError: LocalizedError {
     case generationFailed(String)
     case exportFailed(String)
     case playbackFailed(String)
+    case separationFailed(String)
 
     public var errorDescription: String? {
         switch self {
@@ -22,6 +23,8 @@ public enum AudioHapticError: LocalizedError {
             return L10n.errorExportFailed(detail: detail)
         case .playbackFailed(let detail):
             return L10n.errorPlaybackFailed(detail: detail)
+        case .separationFailed(let detail):
+            return L10n.errorSeparationFailed(detail: detail)
         }
     }
 }
