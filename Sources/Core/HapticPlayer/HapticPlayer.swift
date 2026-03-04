@@ -15,8 +15,6 @@ public final class HapticPlayer {
     private var preparedAudioURL: URL?
 
     public private(set) var isPlaying = false
-    public var audioCurrentTime: TimeInterval { audioPlayer?.currentTime ?? 0 }
-    public var audioDuration: TimeInterval { audioPlayer?.duration ?? 0 }
 
     public init() {}
 
@@ -67,25 +65,16 @@ public final class HapticPlayer {
     }
 
     public func seek(to time: TimeInterval) throws {
-        try seekInternal(audioTime: time, hapticOffset: time)
-    }
-
-    public func seek(audioTime: TimeInterval, hapticOffset: TimeInterval) throws {
-        try seekInternal(audioTime: audioTime, hapticOffset: hapticOffset)
-    }
-
-    private func seekInternal(audioTime: TimeInterval, hapticOffset: TimeInterval) throws {
         guard let audioPlayer else {
             throw AudioHapticError.playbackFailed(L10n.Key.errorDetailPrepareFirst)
         }
 
-        let boundedAudioTime = max(0, min(audioTime, audioPlayer.duration))
-        audioPlayer.currentTime = boundedAudioTime
-
-        let hapticBounded = max(0, hapticOffset)
+        let bounded = max(0, min(time, audioPlayer.duration))
+        audioPlayer.currentTime = bounded
 
         if isPlaying {
-            try advancedPlayer?.seek(toOffset: hapticBounded)
+            try advancedPlayer?.stop(atTime: CHHapticTimeImmediate)
+            try play()
         }
     }
 
