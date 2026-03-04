@@ -32,48 +32,19 @@ public struct ChannelFeatureFrame: Sendable, Equatable {
     public let spectralCentroidNorm: Float
     public let transientStrength: Float
     public let isTransient: Bool
-    public let bandEnergy: SpectralBandEnergy
 
     public init(
         time: TimeInterval,
         rms: Float,
         spectralCentroidNorm: Float,
         transientStrength: Float,
-        isTransient: Bool,
-        bandEnergy: SpectralBandEnergy = .init()
+        isTransient: Bool
     ) {
         self.time = time
         self.rms = rms
         self.spectralCentroidNorm = spectralCentroidNorm
         self.transientStrength = transientStrength
         self.isTransient = isTransient
-        self.bandEnergy = bandEnergy
-    }
-}
-
-public struct SpectralBandEnergy: Sendable, Equatable {
-    public let sub: Float
-    public let kick: Float
-    public let low: Float
-    public let vocal: Float
-    public let presence: Float
-
-    public init(
-        sub: Float = 0,
-        kick: Float = 0,
-        low: Float = 0,
-        vocal: Float = 0,
-        presence: Float = 0
-    ) {
-        self.sub = Self.clamp01(sub)
-        self.kick = Self.clamp01(kick)
-        self.low = Self.clamp01(low)
-        self.vocal = Self.clamp01(vocal)
-        self.presence = Self.clamp01(presence)
-    }
-
-    private static func clamp01(_ value: Float) -> Float {
-        max(0, min(1, value))
     }
 }
 

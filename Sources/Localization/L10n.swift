@@ -44,10 +44,6 @@ public enum L10n {
         static let debugLabelSharpnessPointsFormat = "debug.label.sharpnessPoints.format"
         static let debugLabelCurvePointsEmpty = "debug.label.curvePoints.empty"
         static let debugLabelExportPathFormat = "debug.label.exportPath.format"
-        static let debugLabelStrategyRatioFormat = "debug.label.strategyRatio.format"
-        static let debugLabelLFEAvailableTrue = "debug.label.lfeAvailable.true"
-        static let debugLabelLFEAvailableFalse = "debug.label.lfeAvailable.false"
-        static let debugLabelFallbackFormat = "debug.label.fallback.format"
 
         static let playerNavigationTitle = "player.navigation.title"
         static let playerSectionPackageInfo = "player.section.packageInfo"
@@ -182,23 +178,6 @@ public enum L10n {
         format(Key.debugLabelExportPathFormat, path)
     }
 
-    public static func debugStrategyRatio(kick: Float, vocal: Float, balanced: Float) -> String {
-        format(
-            Key.debugLabelStrategyRatioFormat,
-            Int(clampPercent(kick)),
-            Int(clampPercent(vocal)),
-            Int(clampPercent(balanced))
-        )
-    }
-
-    public static func debugLFEAvailable(_ isAvailable: Bool) -> String {
-        text(isAvailable ? Key.debugLabelLFEAvailableTrue : Key.debugLabelLFEAvailableFalse)
-    }
-
-    public static func debugFallback(_ reasons: String) -> String {
-        format(Key.debugLabelFallbackFormat, reasons)
-    }
-
     public static var playerNavigationTitle: String { text(Key.playerNavigationTitle) }
     public static var playerSectionPackageInfo: String { text(Key.playerSectionPackageInfo) }
     public static var playerSectionPlayback: String { text(Key.playerSectionPlayback) }
@@ -282,10 +261,6 @@ public enum L10n {
 
     private static func format(_ key: String, arguments: [CVarArg]) -> String {
         String(format: text(key), locale: AppLanguage.persisted.locale, arguments: arguments)
-    }
-
-    private static func clampPercent(_ value: Float) -> Float {
-        max(0, min(100, value * 100))
     }
 
     private static func resolvedBundle() -> Bundle {

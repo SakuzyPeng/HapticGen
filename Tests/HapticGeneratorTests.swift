@@ -74,43 +74,4 @@ final class HapticGeneratorTests: XCTestCase {
         XCTAssertLessThanOrEqual(descriptor.intensityCurvePoints.count, 16_384)
         XCTAssertLessThanOrEqual(descriptor.sharpnessCurvePoints.count, 16_384)
     }
-
-    func testGeneratorAppliesTransientDensityGuards() throws {
-        let frameCount = 400
-        var frames: [ChannelFeatureFrame] = []
-        frames.reserveCapacity(frameCount)
-        for index in 0..<frameCount {
-            frames.append(
-                ChannelFeatureFrame(
-                    time: Double(index) * 0.01,
-                    rms: 0.8,
-                    spectralCentroidNorm: 0.5,
-                    transientStrength: 0.95,
-                    isTransient: true
-                )
-            )
-        }
-
-        let analysis = MultiChannelAnalysisResult(
-            duration: 4.0,
-            sampleRate: 48_000,
-            layout: ChannelLayout.detect(channelCount: 2),
-            channels: [
-                ChannelAnalysisResult(label: "L", frames: frames),
-                ChannelAnalysisResult(label: "R", frames: frames)
-            ]
-        )
-
-        let descriptor = try HapticGenerator().generate(
-            from: analysis,
-            mapping: ChannelMapping.defaults(for: analysis.layout),
-            settings: GeneratorSettings(transientSensitivity: 0.1, transientMinInterval: 0.08, transientMaxPerSecond: 8)
-        )
-
-        XCTAssertLessThanOrEqual(descriptor.transientEvents.count, 32)
-        for index in 1..<descriptor.transientEvents.count {
-            let delta = descriptor.transientEvents[index].time - descriptor.transientEvents[index - 1].time
-            XCTAssertGreaterThanOrEqual(delta, 0.079)
-        }
-    }
 }

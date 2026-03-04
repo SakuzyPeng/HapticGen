@@ -24,7 +24,6 @@ final class ProjectViewModel: ObservableObject {
     @Published var statusMessage: String = L10n.statusSelectAudio
     @Published var errorMessage: String?
     @Published var exportedAHAPPath: String = L10n.commonPlaceholderDash
-    @Published var strategyDiagnostics: DefaultHapticStrategyDiagnostics?
 
     @Published var trailerZipURL: URL?
     @Published var showTrailerPlayer: Bool = false
@@ -33,7 +32,6 @@ final class ProjectViewModel: ObservableObject {
     private let generator = HapticGenerator()
     private let exporter = HapticExporter()
     private let player = HapticPlayer()
-    private let strategyResolver = DefaultHapticStrategyResolver()
 
     private var regenerateTask: Task<Void, Never>?
 
@@ -57,7 +55,6 @@ final class ProjectViewModel: ObservableObject {
             generatedPattern = nil
             mapping = .init(intensity: [], sharpness: [], transient: [])
             exportedAHAPPath = L10n.commonPlaceholderDash
-            strategyDiagnostics = nil
         } catch {
             showError(AudioHapticError.invalidAudioFormat)
         }
@@ -82,17 +79,7 @@ final class ProjectViewModel: ObservableObject {
                 }
 
                 analysisResult = result
-                let strategy = strategyResolver.resolve(analysis: result, layout: result.layout, profile: .musicTrailer)
-                mapping = strategy.mapping
-                strategyDiagnostics = strategy.diagnostics
-                settings = GeneratorSettings(
-                    intensityScale: settings.intensityScale,
-                    sharpnessBias: settings.sharpnessBias,
-                    eventDensity: settings.eventDensity,
-                    transientSensitivity: strategy.recommendedTransientSensitivity,
-                    transientMinInterval: 0.08,
-                    transientMaxPerSecond: 8
-                )
+                mapping = ChannelMapping.defaults(for: result.layout)
                 statusMessage = L10n.statusAnalysisCompleted(channelCount: result.layout.channelCount)
             } catch {
                 showError(error)
@@ -218,9 +205,7 @@ final class ProjectViewModel: ObservableObject {
             intensityScale: value,
             sharpnessBias: settings.sharpnessBias,
             eventDensity: settings.eventDensity,
-            transientSensitivity: settings.transientSensitivity,
-            transientMinInterval: settings.transientMinInterval,
-            transientMaxPerSecond: settings.transientMaxPerSecond
+            transientSensitivity: settings.transientSensitivity
         )
         sendLiveParametersIfPossible()
         scheduleDebouncedRegeneration()
@@ -231,9 +216,7 @@ final class ProjectViewModel: ObservableObject {
             intensityScale: settings.intensityScale,
             sharpnessBias: value,
             eventDensity: settings.eventDensity,
-            transientSensitivity: settings.transientSensitivity,
-            transientMinInterval: settings.transientMinInterval,
-            transientMaxPerSecond: settings.transientMaxPerSecond
+            transientSensitivity: settings.transientSensitivity
         )
         sendLiveParametersIfPossible()
         scheduleDebouncedRegeneration()
@@ -244,9 +227,7 @@ final class ProjectViewModel: ObservableObject {
             intensityScale: settings.intensityScale,
             sharpnessBias: settings.sharpnessBias,
             eventDensity: value,
-            transientSensitivity: settings.transientSensitivity,
-            transientMinInterval: settings.transientMinInterval,
-            transientMaxPerSecond: settings.transientMaxPerSecond
+            transientSensitivity: settings.transientSensitivity
         )
         scheduleDebouncedRegeneration()
     }
@@ -256,9 +237,7 @@ final class ProjectViewModel: ObservableObject {
             intensityScale: settings.intensityScale,
             sharpnessBias: settings.sharpnessBias,
             eventDensity: settings.eventDensity,
-            transientSensitivity: value,
-            transientMinInterval: settings.transientMinInterval,
-            transientMaxPerSecond: settings.transientMaxPerSecond
+            transientSensitivity: value
         )
         scheduleDebouncedRegeneration()
     }

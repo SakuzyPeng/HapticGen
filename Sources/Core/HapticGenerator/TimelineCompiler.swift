@@ -167,7 +167,7 @@ public final class TimelineCompiler: @unchecked Sendable {
             continuousEvent: ContinuousEventDescriptor(duration: descriptorDuration),
             intensityCurvePoints: finalizeCurve(points: intensityPoints, density: settings.eventDensity),
             sharpnessCurvePoints: finalizeCurve(points: sharpnessPoints, density: settings.eventDensity),
-            transientEvents: applyTransientGuards(transientEvents, settings: settings)
+            transientEvents: transientEvents
         )
     }
 
@@ -388,33 +388,6 @@ public final class TimelineCompiler: @unchecked Sendable {
 
     private func clamp01(_ value: Float) -> Float {
         max(0, min(1, value))
-    }
-
-    private func applyTransientGuards(
-        _ events: [TransientPoint],
-        settings: GeneratorSettings
-    ) -> [TransientPoint] {
-        guard !events.isEmpty else { return [] }
-
-        let sorted = events.sorted { $0.time < $1.time }
-        var output: [TransientPoint] = []
-        output.reserveCapacity(sorted.count)
-
-        var lastTime: TimeInterval = -.greatestFiniteMagnitude
-        var recentTimes: [TimeInterval] = []
-
-        for event in sorted {
-            guard (event.time - lastTime) >= settings.transientMinInterval else { continue }
-
-            recentTimes.removeAll { event.time - $0 > 1.0 }
-            guard recentTimes.count < settings.transientMaxPerSecond else { continue }
-
-            output.append(event)
-            recentTimes.append(event.time)
-            lastTime = event.time
-        }
-
-        return output
     }
 }
 

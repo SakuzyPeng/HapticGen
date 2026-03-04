@@ -42,7 +42,6 @@ final class TimelineEditorViewModel: ObservableObject {
     private let compiler = TimelineCompiler()
     private let exporter = HapticExporter()
     private let previewPlayer = TimelinePreviewPlayer()
-    private let strategyResolver = DefaultHapticStrategyResolver()
     private let minKeyframeSpacing: TimeInterval = 0.01
     private let maxKeyframesPerCurve: Int = 256
 
@@ -114,8 +113,7 @@ final class TimelineEditorViewModel: ObservableObject {
                 }
 
                 analysisResult = result
-                let strategy = strategyResolver.resolve(analysis: result, layout: result.layout, profile: .musicTrailer)
-                let doc = HapticTimelineDocument.default(for: result, template: selectedTemplate, strategy: strategy)
+                let doc = HapticTimelineDocument.default(for: result.layout, duration: result.duration, template: selectedTemplate)
                 timelineDocument = doc
                 selectedTrackID = doc.tracks.first?.id
                 selectedClipID = doc.tracks.first?.clips.first?.id
@@ -133,8 +131,7 @@ final class TimelineEditorViewModel: ObservableObject {
         selectedTemplate = template
         guard let analysis = analysisResult else { return }
 
-        let strategy = strategyResolver.resolve(analysis: analysis, layout: analysis.layout, profile: .musicTrailer)
-        let doc = HapticTimelineDocument.default(for: analysis, template: template, strategy: strategy)
+        let doc = HapticTimelineDocument.default(for: analysis.layout, duration: analysis.duration, template: template)
         timelineDocument = doc
         selectedTrackID = doc.tracks.first?.id
         selectedClipID = doc.tracks.first?.clips.first?.id

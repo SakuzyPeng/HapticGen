@@ -79,29 +79,6 @@ final class TimelineCompilerTests: XCTestCase {
         XCTAssertTrue(FileManager.default.fileExists(atPath: output.path))
     }
 
-    func testCompileAppliesTransientGuardrails() throws {
-        let analysis = makeSyntheticAnalysis(frameCount: 600, frameStep: 0.01)
-        var document = HapticTimelineDocument.default(for: analysis.layout, duration: analysis.duration, template: .action)
-
-        if let impactIndex = document.tracks.firstIndex(where: { $0.style == .transientBurst }),
-           let clipIndex = document.tracks[impactIndex].clips.indices.first {
-            document.tracks[impactIndex].clips[clipIndex].transientRule.threshold = 0.01
-            document.tracks[impactIndex].clips[clipIndex].transientRule.cooldown = 0
-            document.tracks[impactIndex].clips[clipIndex].transientRule.gain = 2
-        }
-
-        let descriptor = try TimelineCompiler().compile(
-            document: document,
-            analysis: analysis,
-            settings: GeneratorSettings(transientSensitivity: 0, transientMinInterval: 0.08, transientMaxPerSecond: 8)
-        )
-
-        for index in 1..<descriptor.transientEvents.count {
-            let delta = descriptor.transientEvents[index].time - descriptor.transientEvents[index - 1].time
-            XCTAssertGreaterThanOrEqual(delta, 0.079)
-        }
-    }
-
     private func makeSyntheticAnalysis(frameCount: Int, frameStep: TimeInterval) -> MultiChannelAnalysisResult {
         var left: [ChannelFeatureFrame] = []
         var right: [ChannelFeatureFrame] = []

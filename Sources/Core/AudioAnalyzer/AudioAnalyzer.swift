@@ -39,7 +39,6 @@ public final class AudioAnalyzer: @unchecked Sendable {
         var freqBins = [Float](repeating: 0, count: halfFFT)
         vDSP_vramp(&freqBinStart, &binHzStep, &freqBins, 1, vDSP_Length(halfFFT))
         let nyquist = Float(sampleRate / 2)
-        let bandBinRanges = Self.makeBandBinRanges(freqBins: freqBins)
 
         var channelStates = (0..<channelCount).map { index in
             ChannelState(label: layout.labels[safe: index] ?? "Ch\(index + 1)")
@@ -90,7 +89,6 @@ public final class AudioAnalyzer: @unchecked Sendable {
                             settings: settings,
                             hannWindow: localHann,
                             freqBins: localFreqBins,
-                            bandBinRanges: bandBinRanges,
                             nyquist: nyquist,
                             fftSetup: localFFT,
                             log2n: log2n,
@@ -129,8 +127,7 @@ public final class AudioAnalyzer: @unchecked Sendable {
                     rms: Self.clamp01(frame.rms / globalMaxRMS),
                     spectralCentroidNorm: Self.clamp01(frame.centroidNorm),
                     transientStrength: Self.clamp01(frame.rawFlux / maxFlux),
-                    isTransient: frame.isTransient,
-                    bandEnergy: frame.bandEnergy
+                    isTransient: frame.isTransient
                 )
             }
 
@@ -154,7 +151,6 @@ public final class AudioAnalyzer: @unchecked Sendable {
         settings: AnalyzerSettings,
         hannWindow: [Float],
         freqBins: [Float],
-        bandBinRanges: BandBinRanges,
         nyquist: Float,
         fftSetup: FFTSetup,
         log2n: vDSP_Length,
@@ -176,7 +172,6 @@ public final class AudioAnalyzer: @unchecked Sendable {
 
             let rms = computeRMS(windowed)
             let magnitudes = computeMagnitudes(windowed, fftSetup: fftSetup, log2n: log2n)
-            let bandEnergy = computeBandEnergy(magnitudes: magnitudes, ranges: bandBinRanges)
             let flux = spectralFlux(current: magnitudes, previous: state.previousMagnitudes)
             let centroidHz = spectralCentroid(
                 magnitudes: magnitudes,
@@ -193,8 +188,7 @@ public final class AudioAnalyzer: @unchecked Sendable {
                 rms: rms,
                 centroidNorm: normalizeLogFrequency(centroidHz, nyquist: nyquist),
                 rawFlux: flux,
-                isTransient: false,
-                bandEnergy: bandEnergy
+                isTransient: false
             ))
 
             frameStart += settings.hopSize
@@ -256,33 +250,6 @@ public final class AudioAnalyzer: @unchecked Sendable {
         return flux
     }
 
-    private static func computeBandEnergy(magnitudes: [Float], ranges: BandBinRanges) -> SpectralBandEnergy {
-        guard !magnitudes.isEmpty else {
-            return .init()
-        }
-
-        var total: Float = 0
-        vDSP_sve(magnitudes, 1, &total, vDSP_Length(magnitudes.count))
-
-        guard total > 0.000001 else {
-            return .init()
-        }
-
-        let sub = sumRange(magnitudes, range: ranges.sub) / total
-        let kick = sumRange(magnitudes, range: ranges.kick) / total
-        let low = sumRange(magnitudes, range: ranges.low) / total
-        let vocal = sumRange(magnitudes, range: ranges.vocal) / total
-        let presence = sumRange(magnitudes, range: ranges.presence) / total
-
-        return SpectralBandEnergy(
-            sub: sub,
-            kick: kick,
-            low: low,
-            vocal: vocal,
-            presence: presence
-        )
-    }
-
     /// 频谱重心：vDSP_dotpr + vDSP_sve + 预计算 freqBins，替代 Swift enumerated 循环
     private static func spectralCentroid(
         magnitudes: [Float],
@@ -311,45 +278,6 @@ public final class AudioAnalyzer: @unchecked Sendable {
         )
 
         return numerator / denominator
-    }
-
-    private static func makeBandBinRanges(freqBins: [Float]) -> BandBinRanges {
-        BandBinRanges(
-            sub: rangeForBand(20...60, freqBins: freqBins),
-            kick: rangeForBand(60...140, freqBins: freqBins),
-            low: rangeForBand(140...250, freqBins: freqBins),
-            vocal: rangeForBand(250...1200, freqBins: freqBins),
-            presence: rangeForBand(2000...6000, freqBins: freqBins)
-        )
-    }
-
-    private static func rangeForBand(_ hz: ClosedRange<Float>, freqBins: [Float]) -> Range<Int> {
-        guard !freqBins.isEmpty else { return 0..<0 }
-
-        var start = 0
-        while start < freqBins.count, freqBins[start] < hz.lowerBound {
-            start += 1
-        }
-
-        var end = start
-        while end < freqBins.count, freqBins[end] <= hz.upperBound {
-            end += 1
-        }
-
-        if start >= end {
-            return 0..<0
-        }
-        return start..<end
-    }
-
-    private static func sumRange(_ values: [Float], range: Range<Int>) -> Float {
-        guard !range.isEmpty else { return 0 }
-        return values.withUnsafeBufferPointer { buffer in
-            guard let base = buffer.baseAddress else { return 0 }
-            var sum: Float = 0
-            vDSP_sve(base.advanced(by: range.lowerBound), 1, &sum, vDSP_Length(range.count))
-            return sum
-        }
     }
 
     private static func normalizeLogFrequency(_ hz: Float, nyquist: Float) -> Float {
@@ -472,7 +400,6 @@ private struct PendingFeatureFrame: Sendable {
     let centroidNorm: Float
     let rawFlux: Float
     var isTransient: Bool
-    let bandEnergy: SpectralBandEnergy
 }
 
 private struct ChannelState: Sendable {
@@ -481,14 +408,6 @@ private struct ChannelState: Sendable {
     var carry: [Float] = []
     var previousMagnitudes: [Float]?
     var lastValidCentroidHz: Float = 0
-}
-
-private struct BandBinRanges: Sendable {
-    let sub: Range<Int>
-    let kick: Range<Int>
-    let low: Range<Int>
-    let vocal: Range<Int>
-    let presence: Range<Int>
 }
 
 private extension Array {
