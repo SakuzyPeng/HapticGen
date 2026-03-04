@@ -27,6 +27,7 @@ final class ProjectViewModel: ObservableObject {
 
     @Published var trailerZipURL: URL?
     @Published var showTrailerPlayer: Bool = false
+    @Published var showEditor: Bool = false
 
     private let analyzer = AudioAnalyzer()
     private let generator = HapticGenerator()
@@ -105,6 +106,7 @@ final class ProjectViewModel: ObservableObject {
             patternDescriptor = descriptor
             generatedPattern = pattern
             statusMessage = L10n.statusGenerateCompleted(transientCount: descriptor.transientEvents.count)
+            showEditor = true
         } catch {
             showError(error)
         }

@@ -27,6 +27,9 @@ struct DebugDashboardView: View {
                 .padding(16)
             }
             .navigationTitle(L10n.debugNavigationTitle)
+            .navigationDestination(isPresented: $viewModel.showEditor) {
+                TimelineEditorView(projectVM: viewModel)
+            }
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
                     Menu {

@@ -94,6 +94,20 @@ public enum L10n {
         static let errorDetailManifestEncodingFailed = "error.detail.manifestEncodingFailed"
         static let errorDetailEmptyAnalysisResult = "error.detail.emptyAnalysisResult"
         static let errorDetailNoFramesAvailable = "error.detail.noFramesAvailable"
+
+        // MARK: Editor
+        static let editorNavigationTitle = "editor.navigation.title"
+        static let editorTrackIntensity = "editor.track.intensity"
+        static let editorTrackSharpness = "editor.track.sharpness"
+        static let editorTrackTransients = "editor.track.transients"
+        static let editorTrackRegions = "editor.track.regions"
+        static let editorToolSelect = "editor.tool.select"
+        static let editorToolAddTransient = "editor.tool.addTransient"
+        static let editorToolAddRegion = "editor.tool.addRegion"
+        static let editorButtonApply = "editor.button.apply"
+        static let editorButtonClose = "editor.button.close"
+        static let editorZoomLabel = "editor.zoom.label"
+        static let editorDefaultRegionLabel = "editor.region.default"
     }
 
     private static let tableName = "Localizable"
@@ -238,6 +252,21 @@ public enum L10n {
     public static func errorDetailPatternBuildFailed(detail: String) -> String {
         format(Key.errorDetailPatternBuildFailedFormat, detail)
     }
+
+    // MARK: - Editor
+
+    public static var editorNavigationTitle: String { text(Key.editorNavigationTitle) }
+    public static var editorTrackIntensity: String { text(Key.editorTrackIntensity) }
+    public static var editorTrackSharpness: String { text(Key.editorTrackSharpness) }
+    public static var editorTrackTransients: String { text(Key.editorTrackTransients) }
+    public static var editorTrackRegions: String { text(Key.editorTrackRegions) }
+    public static var editorToolSelect: String { text(Key.editorToolSelect) }
+    public static var editorToolAddTransient: String { text(Key.editorToolAddTransient) }
+    public static var editorToolAddRegion: String { text(Key.editorToolAddRegion) }
+    public static var editorButtonApply: String { text(Key.editorButtonApply) }
+    public static var editorButtonClose: String { text(Key.editorButtonClose) }
+    public static var editorZoomLabel: String { text(Key.editorZoomLabel) }
+    public static var editorDefaultRegionLabel: String { text(Key.editorDefaultRegionLabel) }
 
     public static func localizedDetail(_ detail: String) -> String {
         guard detail.hasPrefix("error.detail.") else {

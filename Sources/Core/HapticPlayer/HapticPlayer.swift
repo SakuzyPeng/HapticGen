@@ -16,6 +16,9 @@ public final class HapticPlayer {
 
     public private(set) var isPlaying = false
 
+    /// 当前音频播放位置（秒），未准备时为 nil
+    public var currentTime: TimeInterval? { audioPlayer?.currentTime }
+
     public init() {}
 
     public func prepare(audioURL: URL, pattern: CHHapticPattern) throws {

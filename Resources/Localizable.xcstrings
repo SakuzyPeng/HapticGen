@@ -1,582 +1,1642 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
+    "%@ • %@ch • %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@ • %2$@ch • %3$@"
+          }
+        }
+      }
+    },
+    "Analyze audio to create timeline tracks" : {
+
+    },
     "common.alert.error.title" : {
       "extractionState" : "manual",
       "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Error" } },
-        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "错误" } }
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Error"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "错误"
+          }
+        }
       }
     },
     "common.button.ok" : {
       "extractionState" : "manual",
       "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "OK" } },
-        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "确定" } }
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "OK"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "确定"
+          }
+        }
       }
     },
     "common.placeholder.dash" : {
       "extractionState" : "manual",
       "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "-" } },
-        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "-" } }
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "-"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "-"
+          }
+        }
       }
     },
+    "Cooldown" : {
 
-    "language.menu.title" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Language" } },
-        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "语言" } }
-      }
     },
-    "language.option.auto" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Auto (System)" } },
-        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "跟随系统" } }
-      }
-    },
-    "language.option.zhHans" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "简体中文" } },
-        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "简体中文" } }
-      }
-    },
-    "language.option.en" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "English" } },
-        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "English" } }
-      }
-    },
+    "Custom labels (comma-separated)" : {
 
-    "debug.navigation.title" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "AudioHaptic Debug" } },
-        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "AudioHaptic 调试" } }
-      }
-    },
-    "debug.section.import" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Import" } },
-        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "导入" } }
-      }
-    },
-    "debug.section.action" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Actions" } },
-        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "操作" } }
-      }
-    },
-    "debug.section.parameters" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Parameters" } },
-        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "参数" } }
-      }
-    },
-    "debug.section.result" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Results" } },
-        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "结果" } }
-      }
-    },
-    "debug.section.status" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Status" } },
-        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "状态" } }
-      }
-    },
-
-    "debug.button.importAudio" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Import Audio" } },
-        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "导入音频" } }
-      }
     },
     "debug.button.analyze" : {
       "extractionState" : "manual",
       "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Analyze" } },
-        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "分析" } }
-      }
-    },
-    "debug.button.generate" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Generate" } },
-        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "生成" } }
-      }
-    },
-    "debug.button.play" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Play" } },
-        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "播放" } }
-      }
-    },
-    "debug.button.pause" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Pause" } },
-        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "暂停" } }
-      }
-    },
-    "debug.button.stop" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Stop" } },
-        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "停止" } }
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Analyze"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "分析"
+          }
+        }
       }
     },
     "debug.button.exportAHAP" : {
       "extractionState" : "manual",
       "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Export .ahap" } },
-        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "导出 .ahap" } }
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Export .ahap"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "导出 .ahap"
+          }
+        }
+      }
+    },
+    "debug.button.generate" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Generate"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "生成"
+          }
+        }
+      }
+    },
+    "debug.button.importAudio" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Import Audio"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "导入音频"
+          }
+        }
       }
     },
     "debug.button.packageTrailer" : {
       "extractionState" : "manual",
       "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Package Haptic Trailer" } },
-        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "打包 Haptic Trailer" } }
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Package Haptic Trailer"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "打包 Haptic Trailer"
+          }
+        }
       }
     },
-
-    "debug.slider.intensityScale" : {
+    "debug.button.pause" : {
       "extractionState" : "manual",
       "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Intensity Scale" } },
-        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "强度倍率" } }
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pause"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "暂停"
+          }
+        }
       }
     },
-    "debug.slider.sharpnessBias" : {
+    "debug.button.play" : {
       "extractionState" : "manual",
       "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Sharpness Bias" } },
-        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "清晰度偏移" } }
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Play"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "播放"
+          }
+        }
       }
     },
-    "debug.slider.eventDensity" : {
+    "debug.button.stop" : {
       "extractionState" : "manual",
       "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Event Density" } },
-        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "事件密度" } }
-      }
-    },
-    "debug.slider.transientSensitivity" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Transient Sensitivity" } },
-        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "瞬态灵敏度" } }
-      }
-    },
-
-    "debug.label.file.format" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "File: %@" } },
-        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "文件：%@" } }
-      }
-    },
-    "debug.label.channel.format" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Channels: %d" } },
-        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "声道：%d" } }
-      }
-    },
-    "debug.label.duration.format" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Duration: %@" } },
-        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "时长：%@" } }
-      }
-    },
-    "debug.label.analysisFrames.format" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Analysis Frames: %d" } },
-        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "分析帧数：%d" } }
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Stop"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "停止"
+          }
+        }
       }
     },
     "debug.label.analysisFrames.empty" : {
       "extractionState" : "manual",
       "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Analysis Frames: -" } },
-        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "分析帧数：-" } }
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Analysis Frames: -"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "分析帧数：-"
+          }
+        }
       }
     },
-    "debug.label.layout.format" : {
+    "debug.label.analysisFrames.format" : {
       "extractionState" : "manual",
       "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Layout: %dch" } },
-        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "布局：%dch" } }
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Analysis Frames: %d"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "分析帧数：%d"
+          }
+        }
       }
     },
-    "debug.label.transientCount.format" : {
+    "debug.label.channel.format" : {
       "extractionState" : "manual",
       "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Transients: %d" } },
-        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "瞬态数量：%d" } }
-      }
-    },
-    "debug.label.transientCount.empty" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Transients: -" } },
-        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "瞬态数量：-" } }
-      }
-    },
-    "debug.label.intensityPoints.format" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Intensity Points: %d" } },
-        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "Intensity 点数：%d" } }
-      }
-    },
-    "debug.label.sharpnessPoints.format" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Sharpness Points: %d" } },
-        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "Sharpness 点数：%d" } }
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Channels: %d"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "声道：%d"
+          }
+        }
       }
     },
     "debug.label.curvePoints.empty" : {
       "extractionState" : "manual",
       "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Curve Points: -" } },
-        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "曲线点数：-" } }
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Curve Points: -"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "曲线点数：-"
+          }
+        }
+      }
+    },
+    "debug.label.duration.format" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Duration: %@"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "时长：%@"
+          }
+        }
       }
     },
     "debug.label.exportPath.format" : {
       "extractionState" : "manual",
       "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Export Path: %@" } },
-        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "导出路径：%@" } }
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Export Path: %@"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "导出路径：%@"
+          }
+        }
       }
     },
+    "debug.label.fallback.format" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fallback: %@"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "回退：%@"
+          }
+        }
+      }
+    },
+    "debug.label.file.format" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "File: %@"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "文件：%@"
+          }
+        }
+      }
+    },
+    "debug.label.intensityPoints.format" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Intensity Points: %d"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Intensity 点数：%d"
+          }
+        }
+      }
+    },
+    "debug.label.layout.format" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Layout: %dch"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "布局：%dch"
+          }
+        }
+      }
+    },
+    "debug.label.lfeAvailable.false" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "LFE available: No"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "LFE 可用：否"
+          }
+        }
+      }
+    },
+    "debug.label.lfeAvailable.true" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "LFE available: Yes"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "LFE 可用：是"
+          }
+        }
+      }
+    },
+    "debug.label.sharpnessPoints.format" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sharpness Points: %d"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sharpness 点数：%d"
+          }
+        }
+      }
+    },
+    "debug.label.strategyRatio.format" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Strategy K/V/B: %d%% / %d%% / %d%%"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "策略占比 K/V/B：%d%% / %d%% / %d%%"
+          }
+        }
+      }
+    },
+    "debug.label.transientCount.empty" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Transients: -"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "瞬态数量：-"
+          }
+        }
+      }
+    },
+    "debug.label.transientCount.format" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Transients: %d"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "瞬态数量：%d"
+          }
+        }
+      }
+    },
+    "debug.navigation.title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AudioHaptic Debug"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AudioHaptic 调试"
+          }
+        }
+      }
+    },
+    "debug.section.action" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Actions"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "操作"
+          }
+        }
+      }
+    },
+    "debug.section.import" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Import"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "导入"
+          }
+        }
+      }
+    },
+    "debug.section.parameters" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Parameters"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "参数"
+          }
+        }
+      }
+    },
+    "debug.section.result" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Results"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "结果"
+          }
+        }
+      }
+    },
+    "debug.section.status" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Status"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "状态"
+          }
+        }
+      }
+    },
+    "debug.slider.eventDensity" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Event Density"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "事件密度"
+          }
+        }
+      }
+    },
+    "debug.slider.intensityScale" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Intensity Scale"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "强度倍率"
+          }
+        }
+      }
+    },
+    "debug.slider.sharpnessBias" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sharpness Bias"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "清晰度偏移"
+          }
+        }
+      }
+    },
+    "debug.slider.transientSensitivity" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Transient Sensitivity"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "瞬态灵敏度"
+          }
+        }
+      }
+    },
+    "Duration" : {
 
-    "player.navigation.title" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Haptic Trailer" } },
-        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "Haptic Trailer" } }
-      }
-    },
-    "player.section.packageInfo" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Package Info" } },
-        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "包信息" } }
-      }
-    },
-    "player.section.playback" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Playback Controls" } },
-        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "播放控制" } }
-      }
-    },
-    "player.section.export" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Export" } },
-        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "导出" } }
-      }
-    },
-
-    "player.info.file" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "File" } },
-        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "文件" } }
-      }
-    },
-    "player.info.hlsTag" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "HLS Tag" } },
-        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "HLS 标签" } }
-      }
-    },
-    "player.info.hapticsSupport" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Haptics Support" } },
-        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "触觉支持" } }
-      }
-    },
-    "player.info.hapticsSupported" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Supported (Device)" } },
-        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "支持（真机）" } }
-      }
-    },
-    "player.info.hapticsUnsupported" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Unsupported (Simulator)" } },
-        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "不支持（模拟器）" } }
-      }
-    },
-
-    "player.loading" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Loading..." } },
-        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "加载中…" } }
-      }
-    },
-    "player.button.share" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Share Haptic Trailer Package" } },
-        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "分享 Haptic Trailer 包" } }
-      }
-    },
-    "player.description.share" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Zip includes manifest, AHAP, and audio. Open with this app on the receiving device." } },
-        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "zip 包内含清单、AHAP 和音频，接收方用本 App 打开即可播放。" } }
-      }
-    },
-
-    "status.selectAudio" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Please select an audio file" } },
-        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "请选择音频文件" } }
-      }
-    },
-    "status.importReady" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Audio imported. Tap Analyze to start." } },
-        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "已导入音频，点击 Analyze 开始分析" } }
-      }
-    },
-    "status.analyzing" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Analyzing..." } },
-        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "分析中..." } }
-      }
-    },
-    "status.analysisCompleted.format" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Analysis complete: %dch, ready to generate" } },
-        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "分析完成：%dch，可继续 Generate" } }
-      }
-    },
-    "status.generateCompleted.format" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Generation complete: %d transient events" } },
-        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "生成完成：%d 个瞬态事件" } }
-      }
-    },
-    "status.paused" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Paused" } },
-        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "已暂停" } }
-      }
-    },
-    "status.playing" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Playing" } },
-        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "播放中" } }
-      }
-    },
-    "status.trailerPackaged.format" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Haptic Trailer packaged: %@" } },
-        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "Haptic Trailer 已生成：%@" } }
-      }
-    },
-    "status.exportSuccess.format" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Exported successfully: %@" } },
-        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "导出成功：%@" } }
-      }
-    },
-    "status.errorOccurred" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "An error occurred" } },
-        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "发生错误" } }
-      }
-    },
-
-    "error.invalidAudioFormat" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Unable to parse audio format." } },
-        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "无法解析音频格式。" } }
-      }
-    },
-    "error.unsupportedHaptics" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Haptics are not supported on this device." } },
-        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "当前设备不支持触觉功能。" } }
-      }
     },
     "error.analysisFailed.format" : {
       "extractionState" : "manual",
       "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Audio analysis failed: %@" } },
-        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "音频分析失败：%@" } }
-      }
-    },
-    "error.generationFailed.format" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Haptic generation failed: %@" } },
-        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "触觉生成失败：%@" } }
-      }
-    },
-    "error.exportFailed.format" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Export failed: %@" } },
-        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "导出失败：%@" } }
-      }
-    },
-    "error.playbackFailed.format" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Playback failed: %@" } },
-        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "播放失败：%@" } }
-      }
-    },
-
-    "error.detail.importAudioFirst" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Please import audio first" } },
-        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "请先导入音频" } }
-      }
-    },
-    "error.detail.completeAnalysisFirst" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Please complete analysis first" } },
-        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "请先完成分析" } }
-      }
-    },
-    "error.detail.generatePatternFirst" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Please generate a pattern first" } },
-        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "请先生成 pattern" } }
-      }
-    },
-    "error.detail.sourceAudioMissing" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Source audio file is missing" } },
-        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "缺少源音频文件" } }
-      }
-    },
-    "error.detail.prepareFirst" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Please call prepare first" } },
-        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "请先 prepare" } }
-      }
-    },
-    "error.detail.patternMissing" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Missing haptic pattern" } },
-        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "缺少触觉 pattern" } }
-      }
-    },
-    "error.detail.hapticPlayerNotPrepared" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Haptic player is not prepared" } },
-        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "触觉播放器未准备" } }
-      }
-    },
-    "error.detail.loadManifestFirst" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Please load a manifest first" } },
-        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "请先 load 清单" } }
-      }
-    },
-    "error.detail.manifestNotFoundInZip" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "No .m3u8 manifest found in zip" } },
-        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "zip 包中未找到 .m3u8 清单" } }
-      }
-    },
-    "error.detail.manifestMissingAHAPURL" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Manifest missing AHAP URL" } },
-        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "清单缺少 AHAP URL" } }
-      }
-    },
-    "error.detail.manifestMissingAudioURL" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Manifest missing audio URL" } },
-        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "清单缺少音频 URL" } }
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Audio analysis failed: %@"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "音频分析失败：%@"
+          }
+        }
       }
     },
     "error.detail.audioBufferCreationFailed" : {
       "extractionState" : "manual",
       "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Unable to create audio buffer" } },
-        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "无法创建音频 buffer" } }
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unable to create audio buffer"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无法创建音频 buffer"
+          }
+        }
       }
     },
-    "error.detail.patternBuildFailed.format" : {
+    "error.detail.completeAnalysisFirst" : {
       "extractionState" : "manual",
       "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Unable to build CHHapticPattern: %@" } },
-        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "无法构建 CHHapticPattern: %@" } }
-      }
-    },
-    "error.detail.manifestEncodingFailed" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Manifest encoding failed" } },
-        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "清单编码失败" } }
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Please complete analysis first"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "请先完成分析"
+          }
+        }
       }
     },
     "error.detail.emptyAnalysisResult" : {
       "extractionState" : "manual",
       "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Analysis result is empty" } },
-        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "分析结果为空" } }
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Analysis result is empty"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "分析结果为空"
+          }
+        }
+      }
+    },
+    "error.detail.generatePatternFirst" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Please generate a pattern first"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "请先生成 pattern"
+          }
+        }
+      }
+    },
+    "error.detail.hapticPlayerNotPrepared" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Haptic player is not prepared"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "触觉播放器未准备"
+          }
+        }
+      }
+    },
+    "error.detail.importAudioFirst" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Please import audio first"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "请先导入音频"
+          }
+        }
+      }
+    },
+    "error.detail.loadManifestFirst" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Please load a manifest first"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "请先 load 清单"
+          }
+        }
+      }
+    },
+    "error.detail.manifestEncodingFailed" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Manifest encoding failed"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "清单编码失败"
+          }
+        }
+      }
+    },
+    "error.detail.manifestMissingAHAPURL" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Manifest missing AHAP URL"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "清单缺少 AHAP URL"
+          }
+        }
+      }
+    },
+    "error.detail.manifestMissingAudioURL" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Manifest missing audio URL"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "清单缺少音频 URL"
+          }
+        }
+      }
+    },
+    "error.detail.manifestNotFoundInZip" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No .m3u8 manifest found in zip"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "zip 包中未找到 .m3u8 清单"
+          }
+        }
       }
     },
     "error.detail.noFramesAvailable" : {
       "extractionState" : "manual",
       "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "No frame data available" } },
-        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "没有可用帧数据" } }
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No frame data available"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "没有可用帧数据"
+          }
+        }
+      }
+    },
+    "error.detail.patternBuildFailed.format" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unable to build CHHapticPattern: %@"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无法构建 CHHapticPattern: %@"
+          }
+        }
+      }
+    },
+    "error.detail.patternMissing" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Missing haptic pattern"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "缺少触觉 pattern"
+          }
+        }
+      }
+    },
+    "error.detail.prepareFirst" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Please call prepare first"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "请先 prepare"
+          }
+        }
+      }
+    },
+    "error.detail.sourceAudioMissing" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Source audio file is missing"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "缺少源音频文件"
+          }
+        }
+      }
+    },
+    "error.exportFailed.format" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Export failed: %@"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "导出失败：%@"
+          }
+        }
+      }
+    },
+    "error.generationFailed.format" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Haptic generation failed: %@"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "触觉生成失败：%@"
+          }
+        }
+      }
+    },
+    "error.invalidAudioFormat" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unable to parse audio format."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无法解析音频格式。"
+          }
+        }
+      }
+    },
+    "error.playbackFailed.format" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Playback failed: %@"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "播放失败：%@"
+          }
+        }
+      }
+    },
+    "error.unsupportedHaptics" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Haptics are not supported on this device."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "当前设备不支持触觉功能。"
+          }
+        }
+      }
+    },
+    "Export: %@" : {
+
+    },
+    "Gain" : {
+
+    },
+    "language.menu.title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Language"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "语言"
+          }
+        }
+      }
+    },
+    "language.option.auto" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Auto (System)"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "跟随系统"
+          }
+        }
+      }
+    },
+    "language.option.en" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "English"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "English"
+          }
+        }
+      }
+    },
+    "language.option.zhHans" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "简体中文"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "简体中文"
+          }
+        }
+      }
+    },
+    "Max Hz" : {
+
+    },
+    "Max Output" : {
+
+    },
+    "Min Hz" : {
+
+    },
+    "Mix" : {
+
+    },
+    "player.button.share" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Share Haptic Trailer Package"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "分享 Haptic Trailer 包"
+          }
+        }
+      }
+    },
+    "player.description.share" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zip includes manifest, AHAP, and audio. Open with this app on the receiving device."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "zip 包内含清单、AHAP 和音频，接收方用本 App 打开即可播放。"
+          }
+        }
+      }
+    },
+    "player.info.file" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "File"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "文件"
+          }
+        }
+      }
+    },
+    "player.info.hapticsSupport" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Haptics Support"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "触觉支持"
+          }
+        }
+      }
+    },
+    "player.info.hapticsSupported" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Supported (Device)"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "支持（真机）"
+          }
+        }
+      }
+    },
+    "player.info.hapticsUnsupported" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unsupported (Simulator)"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "不支持（模拟器）"
+          }
+        }
+      }
+    },
+    "player.info.hlsTag" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "HLS Tag"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "HLS 标签"
+          }
+        }
+      }
+    },
+    "player.loading" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Loading..."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "加载中…"
+          }
+        }
+      }
+    },
+    "player.navigation.title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Haptic Trailer"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Haptic Trailer"
+          }
+        }
+      }
+    },
+    "player.section.export" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Export"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "导出"
+          }
+        }
+      }
+    },
+    "player.section.packageInfo" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Package Info"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "包信息"
+          }
+        }
+      }
+    },
+    "player.section.playback" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Playback Controls"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "播放控制"
+          }
+        }
+      }
+    },
+    "Pulse Depth" : {
+
+    },
+    "Pulse Rate" : {
+
+    },
+    "Select a clip" : {
+
+    },
+    "Select a track" : {
+
+    },
+    "Start" : {
+
+    },
+    "status.analysisCompleted.format" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Analysis complete: %dch, ready to generate"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "分析完成：%dch，可继续 Generate"
+          }
+        }
+      }
+    },
+    "status.analyzing" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Analyzing..."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "分析中..."
+          }
+        }
+      }
+    },
+    "status.errorOccurred" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "An error occurred"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "发生错误"
+          }
+        }
+      }
+    },
+    "status.exportSuccess.format" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Exported successfully: %@"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "导出成功：%@"
+          }
+        }
+      }
+    },
+    "status.generateCompleted.format" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Generation complete: %d transient events"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "生成完成：%d 个瞬态事件"
+          }
+        }
+      }
+    },
+    "status.importReady" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Audio imported. Tap Analyze to start."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "已导入音频，点击 Analyze 开始分析"
+          }
+        }
+      }
+    },
+    "status.paused" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Paused"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "已暂停"
+          }
+        }
+      }
+    },
+    "status.playing" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Playing"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "播放中"
+          }
+        }
+      }
+    },
+    "status.selectAudio" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Please select an audio file"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "请选择音频文件"
+          }
+        }
+      }
+    },
+    "status.trailerPackaged.format" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Haptic Trailer packaged: %@"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Haptic Trailer 已生成：%@"
+          }
+        }
+      }
+    },
+    "Threshold" : {
+
+    },
+    "Zoom" : {
+
+    },
+    "editor.navigation.title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : { "state" : "translated", "value" : "Haptic Editor" }
+        },
+        "zh-Hans" : {
+          "stringUnit" : { "state" : "translated", "value" : "触觉编辑器" }
+        }
+      }
+    },
+    "editor.track.intensity" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : { "state" : "translated", "value" : "Intensity" }
+        },
+        "zh-Hans" : {
+          "stringUnit" : { "state" : "translated", "value" : "强度" }
+        }
+      }
+    },
+    "editor.track.sharpness" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : { "state" : "translated", "value" : "Sharpness" }
+        },
+        "zh-Hans" : {
+          "stringUnit" : { "state" : "translated", "value" : "清晰度" }
+        }
+      }
+    },
+    "editor.track.transients" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : { "state" : "translated", "value" : "Transients" }
+        },
+        "zh-Hans" : {
+          "stringUnit" : { "state" : "translated", "value" : "瞬态" }
+        }
+      }
+    },
+    "editor.track.regions" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : { "state" : "translated", "value" : "Channel Weights" }
+        },
+        "zh-Hans" : {
+          "stringUnit" : { "state" : "translated", "value" : "声道权重" }
+        }
+      }
+    },
+    "editor.tool.select" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : { "state" : "translated", "value" : "Select" }
+        },
+        "zh-Hans" : {
+          "stringUnit" : { "state" : "translated", "value" : "选择" }
+        }
+      }
+    },
+    "editor.tool.addTransient" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : { "state" : "translated", "value" : "Add Transient" }
+        },
+        "zh-Hans" : {
+          "stringUnit" : { "state" : "translated", "value" : "添加瞬态" }
+        }
+      }
+    },
+    "editor.tool.addRegion" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : { "state" : "translated", "value" : "Add Region" }
+        },
+        "zh-Hans" : {
+          "stringUnit" : { "state" : "translated", "value" : "添加区域" }
+        }
+      }
+    },
+    "editor.button.apply" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : { "state" : "translated", "value" : "Apply" }
+        },
+        "zh-Hans" : {
+          "stringUnit" : { "state" : "translated", "value" : "应用" }
+        }
+      }
+    },
+    "editor.button.close" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : { "state" : "translated", "value" : "Back" }
+        },
+        "zh-Hans" : {
+          "stringUnit" : { "state" : "translated", "value" : "返回" }
+        }
+      }
+    },
+    "editor.zoom.label" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : { "state" : "translated", "value" : "Zoom" }
+        },
+        "zh-Hans" : {
+          "stringUnit" : { "state" : "translated", "value" : "缩放" }
+        }
+      }
+    },
+    "editor.region.default" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : { "state" : "translated", "value" : "default" }
+        },
+        "zh-Hans" : {
+          "stringUnit" : { "state" : "translated", "value" : "默认" }
+        }
       }
     }
   },

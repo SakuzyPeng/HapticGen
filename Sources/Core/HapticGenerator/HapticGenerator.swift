@@ -3,9 +3,23 @@ import Foundation
 public final class HapticGenerator: @unchecked Sendable {
     public init() {}
 
+    /// 使用全局声道权重生成（向后兼容接口）
     public func generate(
         from analysis: MultiChannelAnalysisResult,
         mapping: ChannelMapping,
+        settings: GeneratorSettings
+    ) throws -> HapticPatternDescriptor {
+        try generate(
+            from: analysis,
+            regionMapping: TimeRegionMapping(defaultMapping: mapping),
+            settings: settings
+        )
+    }
+
+    /// 使用时间区域分段权重生成，支持不同时间段使用不同声道混合策略
+    public func generate(
+        from analysis: MultiChannelAnalysisResult,
+        regionMapping: TimeRegionMapping,
         settings: GeneratorSettings
     ) throws -> HapticPatternDescriptor {
         guard !analysis.channels.isEmpty else {
@@ -13,8 +27,6 @@ public final class HapticGenerator: @unchecked Sendable {
         }
 
         let labels = analysis.channels.map(\.label)
-        let resolvedMapping = mapping.withFallbackResolved(using: labels)
-
         let indexByLabel = Dictionary(uniqueKeysWithValues: labels.enumerated().map { ($1, $0) })
         let frameCount = analysis.channels.map { $0.frames.count }.min() ?? 0
 
@@ -22,37 +34,47 @@ public final class HapticGenerator: @unchecked Sendable {
             throw AudioHapticError.generationFailed(L10n.Key.errorDetailNoFramesAvailable)
         }
 
-        let intensityWeights = resolvedMapping.normalizedWeights(for: .intensity, availableLabels: labels)
-        let sharpnessWeights = resolvedMapping.normalizedWeights(for: .sharpness, availableLabels: labels)
-        let transientWeights = resolvedMapping.normalizedWeights(for: .transient, availableLabels: labels)
-
         var intensityPoints: [CurvePoint] = []
         var sharpnessPoints: [CurvePoint] = []
         var transientEvents: [TransientPoint] = []
-
         var lastTransientTime: TimeInterval = -.greatestFiniteMagnitude
+
+        // 缓存当前区域的权重，只在跨越区域边界时重新计算
+        var cachedRegionTime: TimeInterval = -.greatestFiniteMagnitude
+        var cachedIntensityWeights: [ChannelWeight] = []
+        var cachedSharpnessWeights: [ChannelWeight] = []
+        var cachedTransientWeights: [ChannelWeight] = []
 
         for frameIndex in 0..<frameCount {
             let time = analysis.channels[0].frames[frameIndex].time
 
+            // 查询当前时间的声道权重（区域边界处刷新缓存）
+            if time != cachedRegionTime {
+                let resolved = regionMapping.mapping(at: time).withFallbackResolved(using: labels)
+                cachedIntensityWeights = resolved.normalizedWeights(for: .intensity, availableLabels: labels)
+                cachedSharpnessWeights = resolved.normalizedWeights(for: .sharpness, availableLabels: labels)
+                cachedTransientWeights = resolved.normalizedWeights(for: .transient, availableLabels: labels)
+                cachedRegionTime = time
+            }
+
             let rawIntensity = weightedAverage(
                 framesAt: frameIndex,
                 channels: analysis.channels,
-                weights: intensityWeights,
+                weights: cachedIntensityWeights,
                 indexByLabel: indexByLabel,
                 keyPath: \.rms
             )
             let rawSharpness = weightedAverage(
                 framesAt: frameIndex,
                 channels: analysis.channels,
-                weights: sharpnessWeights,
+                weights: cachedSharpnessWeights,
                 indexByLabel: indexByLabel,
                 keyPath: \.spectralCentroidNorm
             )
             let rawTransient = weightedMax(
                 framesAt: frameIndex,
                 channels: analysis.channels,
-                weights: transientWeights,
+                weights: cachedTransientWeights,
                 indexByLabel: indexByLabel,
                 keyPath: \.transientStrength
             )
