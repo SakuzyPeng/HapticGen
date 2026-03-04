@@ -9,6 +9,10 @@ xcuserdata/
 build/
 DerivedData/
 
+# CoreML model bundles (large binary assets, managed separately)
+*.mlmodelc/
+*.mlpackage/
+
 # Common audio assets
 *.wav
 *.wave
